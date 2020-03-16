@@ -39,31 +39,60 @@ class Cat:
     """
 
     def __init__(self, age):
-        pass
+        self.age = age
+        self.saturation_level = 50
+        self.average_speed = self._set_average_speed()
 
     def eat(self, product):
-        pass
+        food = {"fodder": 10, "apple": 5, "milk": 2, "another_food": 0}
+        if product in food:
+            self._increase_saturation_level(food[product])
 
     def _reduce_saturation_level(self, value):
-        pass
+        self.saturation_level = (
+            self.saturation_level - value if self.saturation_level - value >= 0 else 0
+        )
 
     def _increase_saturation_level(self, value):
-        pass
+        self.saturation_level = (
+            self.saturation_level + value
+            if self.saturation_level + value <= 100
+            else 100
+        )
 
     def _set_average_speed(self):
-        pass
+        if self.age <= 7:
+            return 12
+        elif 7 < self.age <= 10:
+            return 9
+        elif self.age > 10:
+            return 6
 
     def run(self, hours):
-        pass
+        distance = hours * self.average_speed
+        if distance <= 25:
+            self._reduce_saturation_level(2)
+        elif 25 < distance <= 50:
+            self._reduce_saturation_level(5)
+        elif 50 < distance <= 100:
+            self._reduce_saturation_level(15)
+        elif 100 < distance <= 200:
+            self._reduce_saturation_level(25)
+        elif distance > 200:
+            self._reduce_saturation_level(50)
+        return f"Your cat has ran {distance} kilometers"
 
     def get_saturation_level(self):
-        pass
+        if self.saturation_level == 0:
+            return "Your cat is dead :("
+        else:
+            return self.saturation_level
 
     def get_average_speed(self):
-        pass
+        return self.average_speed
 
 
-class Cheetah:
+class Cheetah(Cat):
     """
     * Inherit from class Cat
 
@@ -73,10 +102,23 @@ class Cheetah:
 
     * Redefine method _set_average_speed
       if age less or eq 5 return 90
-      if age between 5 and 15(including) return 75
-      if age grosser 15(not including) return 40
+      if age between 5 and 15 (including) return 75
+      if age grosser 15 (not including) return 40
 
     """
+
+    def eat(self, product):
+        food = {"gazelle": 30, "rabbit": 15, "another_food": 0}
+        if product in food:
+            self._increase_saturation_level(food[product])
+
+    def _set_average_speed(self):
+        if self.age <= 5:
+            return 90
+        elif 5 < self.age <= 15:
+            return 75
+        elif self.age > 15:
+            return 40
 
 
 class Wall:
