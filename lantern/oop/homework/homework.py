@@ -44,26 +44,19 @@ class Cat:
         self.average_speed = self._set_average_speed()
 
     def eat(self, product):
-        food = {"fodder": 10, "apple": 5, "milk": 2, "another_food": 0}
-        if product in food:
-            self._increase_saturation_level(food[product])
+        food = {"fodder": 10, "apple": 5, "milk": 2}
+        self._increase_saturation_level(food.get(product, 0))
 
     def _reduce_saturation_level(self, value):
-        self.saturation_level = (
-            self.saturation_level - value if self.saturation_level - value >= 0 else 0
-        )
+        self.saturation_level = max(self.saturation_level - value, 0)
 
     def _increase_saturation_level(self, value):
-        self.saturation_level = (
-            self.saturation_level + value
-            if self.saturation_level + value <= 100
-            else 100
-        )
+        self.saturation_level = min(self.saturation_level + value, 100)
 
     def _set_average_speed(self):
         if self.age <= 7:
             return 12
-        elif 7 < self.age <= 10:
+        elif self.age <= 10:
             return 9
         elif self.age > 10:
             return 6
@@ -74,9 +67,9 @@ class Cat:
             self._reduce_saturation_level(2)
         elif 25 < distance <= 50:
             self._reduce_saturation_level(5)
-        elif 50 < distance <= 100:
+        elif distance <= 100:
             self._reduce_saturation_level(15)
-        elif 100 < distance <= 200:
+        elif distance <= 200:
             self._reduce_saturation_level(25)
         elif distance > 200:
             self._reduce_saturation_level(50)
@@ -108,14 +101,13 @@ class Cheetah(Cat):
     """
 
     def eat(self, product):
-        food = {"gazelle": 30, "rabbit": 15, "another_food": 0}
-        if product in food:
-            self._increase_saturation_level(food[product])
+        food = {"gazelle": 30, "rabbit": 15}
+        self._increase_saturation_level(food.get(product, 0))
 
     def _set_average_speed(self):
         if self.age <= 5:
             return 90
-        elif 5 < self.age <= 15:
+        elif self.age <= 15:
             return 75
         elif self.age > 15:
             return 40
