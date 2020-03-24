@@ -42,8 +42,10 @@ class Robot:
 
 
 class MissAsteroidError(Exception):
-    pass
+    def __str__(self):
+        return "Oops! Your robot missed from asteroid!"
 
 
 class ObstacleRobotError(Exception):
-    pass
+    def __str__(self):
+        return "Oops! Your robot has some obstacle on his way!"

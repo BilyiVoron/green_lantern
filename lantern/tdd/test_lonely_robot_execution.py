@@ -34,9 +34,7 @@ class TestRobotCreation:
                 ((15, 25), (-2, -3), (12, 17)),
         ),
     )
-    def test_check_if_robot_on_asteroid(
-            self, asteroid_size, robot_coordinates, obstacle_position
-    ):
+    def test_check_if_robot_on_asteroid(self, asteroid_size, robot_coordinates, obstacle_position):
         with pytest.raises(MissAsteroidError):
             asteroid = Asteroid(*asteroid_size)
             obstacle = Obstacle(*obstacle_position, asteroid)
