@@ -10,7 +10,7 @@ from lonely_robot import (
 
 class TestRobotCreation:
     def test_parameters(self):
-        a, b = 10, 15
+        a, b = 20, 20
         asteroid = Asteroid(a, b)
         x_obstacle, y_obstacle = 7, 11
         obstacle = Obstacle(x_obstacle, y_obstacle, asteroid)
@@ -19,19 +19,23 @@ class TestRobotCreation:
         robot = Robot(x, y, asteroid, direction, obstacle)
         assert robot.x == 10
         assert robot.y == 15
+        assert robot.direction == direction
         assert robot.asteroid == asteroid
         assert robot.obstacle == obstacle
 
     @pytest.mark.parametrize(
         "asteroid_size,robot_coordinates,obstacle_position",
         (
-            ((15, 25), (26, 30), (12, 17)),
-            ((15, 25), (26, 24), (12, 17)),
-            ((15, 25), (15, 27), (12, 17)),
+                ((15, 25), (26, 30), (12, 17)),
+                ((15, 25), (26, 24), (12, 17)),
+                ((15, 25), (15, 27), (12, 17)),
+                ((15, 25), (-2, 27), (12, 17)),
+                ((15, 25), (15, -3), (12, 17)),
+                ((15, 25), (-2, -3), (12, 17)),
         ),
     )
     def test_check_if_robot_on_asteroid(
-        self, asteroid_size, robot_coordinates, obstacle_position
+            self, asteroid_size, robot_coordinates, obstacle_position
     ):
         with pytest.raises(MissAsteroidError):
             asteroid = Asteroid(*asteroid_size)
@@ -49,10 +53,12 @@ class TestTurns:
 
     @pytest.mark.parametrize(
         "current_direction,expected_direction",
-        (("N", "W"),
-         ("W", "S"),
-         ("S", "E"),
-         ("E", "N")),
+        (
+                ("N", "W"),
+                ("W", "S"),
+                ("S", "E"),
+                ("E", "N"),
+        ),
     )
     def test_turn_left(self, current_direction, expected_direction):
         robot = Robot(self.x, self.y, self.asteroid, current_direction, self.obstacle)
@@ -65,7 +71,7 @@ class TestTurns:
                 ("N", "E"),
                 ("E", "S"),
                 ("S", "W"),
-                ("W", "N")
+                ("W", "N"),
         ),
     )
     def test_turn_right(self, current_direction, expected_direction):

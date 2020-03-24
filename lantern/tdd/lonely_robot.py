@@ -19,10 +19,10 @@ class Robot:
         self.direction = direction
         self.obstacle = obstacle
         self.position = x, y
-        if self.x > self.asteroid.a or self.y > self.asteroid.b:
-            raise MissAsteroidError()
+        if not (self.asteroid.a >= self.x >= 0 and self.asteroid.b >= self.y >= 0):
+            raise MissAsteroidError
         elif self.x == self.obstacle.x or self.y == self.obstacle.y:
-            raise ObstacleRobotError()
+            raise ObstacleRobotError
 
     def turn_left(self):
         left_turns = {"E": "N", "N": "W", "W": "S", "S": "E"}
