@@ -33,7 +33,12 @@ class Robot:
         self.direction = right_turns.get(self.direction, "N")
 
     def move_forward(self):
-        forward_moves = {self.position: self.x + 1 or self.y + 1}
+        forward_moves = {
+            "N": {self.position: (self.x, self.y + 1)},
+            "E": {self.position: (self.x + 1, self.y)},
+            "S": {self.position: (self.x, self.y - 1)},
+            "W": {self.position: (self.x - 1, self.y)},
+        }
         self.position = forward_moves.get(self.position, None)
 
     def move_backward(self):

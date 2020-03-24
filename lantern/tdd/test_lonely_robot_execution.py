@@ -79,6 +79,20 @@ class TestTurns:
 
 
 class TestMoves:
+    @pytest.mark.parametrize(
+        "direction,current_position,expected_position",
+        (
+                ("N", (5, 10), (5, 11)),
+                ("E", (5, 10), (6, 10)),
+                ("S", (5, 10), (5, 9)),
+                ("W", (5, 10), (4, 10)),
+        )
+    )
+    def test_move_forward(self, current_position, expected_position, direction):
+        robot = Robot(self.x, self.y, self.asteroid, current_position, self.obstacle)
+        robot.move_forward()
+        assert robot.x, robot.y == expected_position
+
     def setup(self):
         self.a, self.b = 10, 15
         self.asteroid = Asteroid(self.a, self.b)
@@ -87,25 +101,15 @@ class TestMoves:
         self.x, self.y = 10, 15
 
     @pytest.mark.parametrize(
-        "current_position,expected_position",
+        "direction,current_position,expected_position",
         (
-                ((5, 10), (6, 10)),
-                ((5, 10), (5, 11))
+                ("N", (5, 10), (5, 9)),
+                ("E", (5, 10), (4, 10)),
+                ("S", (5, 10), (5, 11)),
+                ("W", (5, 10), (6, 10)),
         )
     )
-    def test_move_forward(self, current_position, expected_position):
-        robot = Robot(self.x, self.y, self.asteroid, current_position, self.obstacle)
-        robot.move_forward()
-        assert robot.x, robot.y == expected_position
-
-    @pytest.mark.parametrize(
-        "current_position,expected_position",
-        (
-                ((5, 10), (4, 10)),
-                ((5, 10), (5, 9))
-        )
-    )
-    def test_move_backward(self, current_position, expected_position):
+    def test_move_backward(self, current_position, expected_position, direction):
         robot = Robot(self.x, self.y, self.asteroid, current_position, self.obstacle)
         robot.move_backward()
         assert robot.x, robot.y == expected_position
