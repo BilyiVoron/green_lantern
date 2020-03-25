@@ -29,14 +29,10 @@ class Robot:
     def turn_left(self):
         left_turns = {"E": "N", "N": "W", "W": "S", "S": "E"}
         self.direction = left_turns.get(self.direction, "N")
-        # if left_turns == {"E": "W", "N": "S", "W": "E", "S": "N"}:
-        #     raise DirectionRobotError
 
     def turn_right(self):
         right_turns = {"E": "S", "S": "W", "W": "N", "N": "E"}
         self.direction = right_turns.get(self.direction, "N")
-        # if right_turns == {"E": "W", "N": "S", "W": "E", "S": "N"}:
-        #     raise DirectionRobotError
 
     def move_forward(self):
         forward_moves = {
@@ -70,7 +66,3 @@ class ObstaclePositionError(Exception):
 class ObstacleRobotError(Exception):
     def __str__(self):
         return "Oops! Your robot has some obstacle on his way!"
-
-
-# class DirectionRobotError(Exception):
-#     pass

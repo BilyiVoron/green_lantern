@@ -4,7 +4,6 @@ from lonely_robot import (
     Asteroid,
     Obstacle,
     ObstacleRobotError,
-    # DirectionRobotError,
     OutsideAsteroidError,
     ObstaclePositionError,
 )
@@ -106,9 +105,6 @@ class TestTurnsAndMoves:
         ),
     )
     def test_if_robot_does_not_make_wrong_turns(self, current_direction, none_expected_direction):
-        # with pytest.raises(DirectionRobotError):
-            # obstacle = self.obstacle
-            # Robot(self.x, self.y, self.asteroid, current_direction, self.obstacle)
         robot = Robot(self.x, self.y, self.asteroid, current_direction, self.obstacle)
         robot.turn_right()
         assert robot.direction != none_expected_direction
