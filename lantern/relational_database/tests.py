@@ -28,6 +28,13 @@ from homework import \
      )
 
 
+def load_rows_from_file(file_name):
+    file = os.path.join(FIXTURES_PATH, "tests_results", file_name)
+    with open(file) as json_file:
+        data = json.load(json_file)
+    return data
+
+
 class TestSQLQueries(unittest.TestCase):
 
     conn = None
@@ -43,7 +50,6 @@ class TestSQLQueries(unittest.TestCase):
             if cursor.fetchone():
                 cursor.execute(f"DROP ROLE {user}")
             conn.commit()
-
 
     @staticmethod
     def create_test_database_and_role(conn):
@@ -90,7 +96,7 @@ class TestSQLQueries(unittest.TestCase):
             task_1_add_new_record_to_db(self.conn)
             cursor.execute("SELECT * from customers;")
             actual_result = [dict(record) for record in cursor]
-            expected_result = self.load_rows_from_file("task_1.json")
+            expected_result = load_rows_from_file("task_1.json")
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
 
@@ -98,7 +104,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_2_list_all_customers(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_2.json")
+            expected_result = load_rows_from_file("task_2.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -107,7 +113,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_3_list_customers_in_germany(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_3.json")
+            expected_result = load_rows_from_file("task_3.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -117,7 +123,7 @@ class TestSQLQueries(unittest.TestCase):
             task_4_update_customer(self.conn)
             cursor.execute("SELECT * from customers;")
             actual_result = [dict(record) for record in cursor]
-            expected_result = self.load_rows_from_file("task_4.json")
+            expected_result = load_rows_from_file("task_4.json")
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
 
@@ -128,7 +134,7 @@ class TestSQLQueries(unittest.TestCase):
             task_5_delete_the_last_customer(self.conn)
             cursor.execute("SELECT * from customers;")
             actual_result = [dict(record) for record in cursor]
-            expected_result = self.load_rows_from_file("task_5.json")
+            expected_result = load_rows_from_file("task_5.json")
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
 
@@ -138,7 +144,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_6_list_all_supplier_countries(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_6.json")
+            expected_result = load_rows_from_file("task_6.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -147,7 +153,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_7_list_supplier_countries_in_desc_order(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_7.json")
+            expected_result = load_rows_from_file("task_7.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -156,7 +162,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_8_count_customers_by_city(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_8.json")
+            expected_result = load_rows_from_file("task_8.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -165,7 +171,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_9_count_customers_by_country_with_than_10_customers(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_9.json")
+            expected_result = load_rows_from_file("task_9.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -174,7 +180,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_10_list_first_10_customers(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_10.json")
+            expected_result = load_rows_from_file("task_10.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -183,7 +189,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_11_list_customers_starting_from_11th(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_11.json")
+            expected_result = load_rows_from_file("task_11.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -192,7 +198,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_12_list_suppliers_from_specified_countries(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_12.json")
+            expected_result = load_rows_from_file("task_12.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -201,7 +207,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_13_list_products_from_sweden_suppliers(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_13.json")
+            expected_result = load_rows_from_file("task_13.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -210,7 +216,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_14_list_products_with_supplier_information(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_14.json")
+            expected_result = load_rows_from_file("task_14.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -219,7 +225,7 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_15_list_customers_with_any_order_or_not(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_15.json")
+            expected_result = load_rows_from_file("task_15.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
@@ -228,16 +234,10 @@ class TestSQLQueries(unittest.TestCase):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_16_match_all_customers_and_suppliers_by_country(cursor)
             actual_result = [dict(record) for record in actual_result]
-            expected_result = self.load_rows_from_file("task_16.json")
+            expected_result = load_rows_from_file("task_16.json")
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
-
-    def load_rows_from_file(self, file_name):
-        file = os.path.join(FIXTURES_PATH, "tests_results", file_name)
-        with open(file) as json_file:
-            data = json.load(json_file)
-        return data
 
 
 if __name__ == "__main__":

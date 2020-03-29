@@ -1,7 +1,10 @@
 from typing import List
+import psycopg2
+
+from config import DATABASE
 
 
-def task_1_add_new_record_to_db(con) -> None:
+def task_1_add_new_record_to_db(conn) -> None:
     """
     Add a record for a new customer from Singapore
     {
@@ -14,12 +17,38 @@ def task_1_add_new_record_to_db(con) -> None:
     }
 
     Args:
-        con: psycopg connection
+        conn: psycopg connection
 
     Returns: 92 records
 
     """
-    pass
+    sql = """
+    INSERT INTO customers (customer_name, contactname, address, city, postalcode, country)
+    VALUES ('Thomas', 'Tom', 'Baker St. 221B', 'London', '774', 'UK')
+    """
+    # records = []
+    # # "SELECT * FROM customers LIMIT 92"
+    #
+    # try:
+    #     # connect to the PostgreSQL database
+    #     conn = psycopg2.connect(**DATABASE)
+    #     # create a new cursor
+    #     cur = conn.cursor()
+    #     # execute the INSERT statement
+    #     # cur.execute(sql)
+    #     # commit the changes to the database
+    #     # conn.commit()
+    #     cur.execute("SELECT * FROM customers LIMIT 92")
+    #     records = cur.fetchall()
+    #     # close communication with the database
+    #     cur.close()
+    # except (Exception, psycopg2.DatabaseError) as error:
+    #     print(error)
+    # finally:
+    #     if conn is not None:
+    #         conn.close()
+    # return records
+    return sql
 
 
 def task_2_list_all_customers(cur) -> list:
@@ -47,7 +76,7 @@ def task_3_list_customers_in_germany(cur) -> list:
     pass
 
 
-def task_4_update_customer(con):
+def task_4_update_customer(cur):
     """
     Update first customer's name (Set customername equal to  'Johnny Depp')
     Args:
@@ -59,12 +88,12 @@ def task_4_update_customer(con):
     pass
 
 
-def task_5_delete_the_last_customer(con) -> None:
+def task_5_delete_the_last_customer(conn) -> None:
     """
     Delete the last customer
 
     Args:
-        con: psycopg connection
+        conn: psycopg connection
     """
     pass
 
@@ -199,3 +228,8 @@ def task_16_match_all_customers_and_suppliers_by_country(cur):
     Returns: 194 records
     """
     pass
+
+
+# if __name__ == '__main__':
+#     result = "SELECT * FROM customers LIMIT 92"
+#     print(result)

@@ -4,12 +4,12 @@ from database.config import DATABASE
 from db_utils import clear_tables, drop_tables
 
 if __name__ == "__main__":
-    con = psycopg2.connect(**DATABASE)
-    with con.cursor() as cursor:
+    conn = psycopg2.connect(**DATABASE)
+    with conn.cursor() as cursor:
         try:
             clear_tables(cursor)
             drop_tables(cursor)
-            con.commit()
+            conn.commit()
         finally:
-            if con:
-                con.close()
+            if conn:
+                conn.close()
