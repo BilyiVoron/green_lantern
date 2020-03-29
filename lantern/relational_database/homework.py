@@ -8,7 +8,7 @@ def task_1_add_new_record_to_db(conn) -> None:
     """
     Add a record for a new customer from Singapore
     {
-        'customer_name': 'Thomas',
+        'customername': 'Thomas',
         'contactname': 'David',
         'address': 'Some Address',
         'city': 'London',
@@ -23,32 +23,15 @@ def task_1_add_new_record_to_db(conn) -> None:
 
     """
     sql = """
-    INSERT INTO customers (customer_name, contactname, address, city, postalcode, country)
-    VALUES ('Thomas', 'Tom', 'Baker St. 221B', 'London', '774', 'UK')
+    INSERT INTO customers (customername, contactname, address, city, postalcode, country)
+    VALUES ('Thomas', 'David', 'Some Address', 'London', '774', 'Singapore')
     """
-    # records = []
-    # # "SELECT * FROM customers LIMIT 92"
-    #
-    # try:
-    #     # connect to the PostgreSQL database
-    #     conn = psycopg2.connect(**DATABASE)
-    #     # create a new cursor
-    #     cur = conn.cursor()
-    #     # execute the INSERT statement
-    #     # cur.execute(sql)
-    #     # commit the changes to the database
-    #     # conn.commit()
-    #     cur.execute("SELECT * FROM customers LIMIT 92")
-    #     records = cur.fetchall()
-    #     # close communication with the database
-    #     cur.close()
-    # except (Exception, psycopg2.DatabaseError) as error:
-    #     print(error)
-    # finally:
-    #     if conn is not None:
-    #         conn.close()
-    # return records
-    return sql
+    # create a new cursor
+    cur = conn.cursor()
+    # # execute the INSERT statement
+    cur.execute(sql)
+    # # commit the changes to the database
+    conn.commit()
 
 
 def task_2_list_all_customers(cur) -> list:
@@ -61,7 +44,8 @@ def task_2_list_all_customers(cur) -> list:
     Returns: 91 records
 
     """
-    pass
+    cur.execute("SELECT * FROM customers")
+    return cur.fetchall()
 
 
 def task_3_list_customers_in_germany(cur) -> list:
@@ -230,6 +214,6 @@ def task_16_match_all_customers_and_suppliers_by_country(cur):
     pass
 
 
-# if __name__ == '__main__':
-#     result = "SELECT * FROM customers LIMIT 92"
-#     print(result)
+if __name__ == '__main__':
+    result = task_1_add_new_record_to_db()
+    print(result)
