@@ -125,6 +125,7 @@ class TestSQLQueries(unittest.TestCase):
             cursor.execute("SELECT * from customers;")
             actual_result = [dict(record) for record in cursor]
             expected_result = load_rows_from_file("task_4.json")
+
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
 
@@ -136,6 +137,7 @@ class TestSQLQueries(unittest.TestCase):
             cursor.execute("SELECT * from customers;")
             actual_result = [dict(record) for record in cursor]
             expected_result = load_rows_from_file("task_5.json")
+
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
 
@@ -221,6 +223,9 @@ class TestSQLQueries(unittest.TestCase):
 
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
+
+        print("\n!!!!!!!!!!!!!!!!!!")
+        print(actual_result)
 
     def test_task_15(self):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
