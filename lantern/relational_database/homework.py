@@ -1,9 +1,3 @@
-from typing import List
-import psycopg2
-
-from config import DATABASE
-
-
 def task_1_add_new_record_to_db(conn) -> None:
     """
     Add a record for a new customer from Singapore
@@ -127,7 +121,7 @@ def task_8_count_customers_by_city(cur) -> list:
     Returns: 69 records
 
     """
-    cur.execute("SELECT COUNT(customername), city FROM customers GROUP BY city ORDER BY city DESC;")
+    cur.execute("SELECT COUNT(customerid), city FROM customers GROUP BY city ORDER BY city DESC;")
     return cur.fetchall()
 
 
@@ -210,10 +204,10 @@ def task_14_list_products_with_supplier_information(cur) -> list:
     Returns: 77 records
     """
     sql = """
-        SET LOCAL lc_monetary = 'en_US.UTF-8';
-        SELECT productid, productname, unit, price, country, city, suppliername
-        FROM products, suppliers WHERE products.supplierid = suppliers.supplierid;
-        """
+    SET LOCAL lc_monetary = 'en_US.UTF-8';
+    SELECT productid, productname, unit, price, country, city, suppliername
+    FROM products, suppliers WHERE products.supplierid = suppliers.supplierid;
+    """
     cur.execute(sql)
     return cur.fetchall()
 
