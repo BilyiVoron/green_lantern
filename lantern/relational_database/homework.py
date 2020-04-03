@@ -176,11 +176,14 @@ def task_12_list_suppliers_from_specified_countries(cur):
 
     Returns: 8 records
     """
-    cur.execute("SELECT * FROM suppliers WHERE country = 'USA' OR country = 'UK' OR country = 'Japan';")
+    sql = """
+    SELECT supplierid, suppliername, contactname, city, country FROM suppliers WHERE country IN ('USA', 'UK', 'Japan');
+    """
+    cur.execute(sql)
     return cur.fetchall()
 
 
-def task_13_list_products_from_sweden_suppliers(cur):
+def task_13_list_products_from_sweden_suppliers(cur) -> list:
     """
     List products with suppliers from Sweden.
 
@@ -197,7 +200,7 @@ def task_13_list_products_from_sweden_suppliers(cur):
     return cur.fetchall()
 
 
-def task_14_list_products_with_supplier_information(cur):
+def task_14_list_products_with_supplier_information(cur) -> list:
     """
     List all products with supplier information
 
@@ -207,14 +210,15 @@ def task_14_list_products_with_supplier_information(cur):
     Returns: 77 records
     """
     sql = """
-        SELECT * FROM products, suppliers
-        WHERE products.supplierid = suppliers.supplierid;
+        SET LOCAL lc_monetary = 'en_US.UTF-8';
+        SELECT productid, productname, unit, price, country, city, suppliername
+        FROM products, suppliers WHERE products.supplierid = suppliers.supplierid;
         """
     cur.execute(sql)
     return cur.fetchall()
 
 
-def task_15_list_customers_with_any_order_or_not(cur):
+def task_15_list_customers_with_any_order_or_not(cur) -> list:
     """
     List all customers, whether they placed any order or not.
 
@@ -223,10 +227,15 @@ def task_15_list_customers_with_any_order_or_not(cur):
 
     Returns: 213 records
     """
-    pass
+    sql = """
+    SELECT customername, contactname, country, orderid
+    FROM customers, orders WHERE customers.customerid = orders.customerid;
+    """
+    cur.execute(sql)
+    return cur.fetchall()
 
 
-def task_16_match_all_customers_and_suppliers_by_country(cur):
+def task_16_match_all_customers_and_suppliers_by_country(cur) -> list:
     """
     Match all customers and suppliers by country
 
@@ -235,4 +244,11 @@ def task_16_match_all_customers_and_suppliers_by_country(cur):
 
     Returns: 194 records
     """
-    pass
+    sql = """
+        SELECT customername, a.address as address, a.country as customercountry, 
+        b.country as suppliercountry, b.suppliername 
+        FROM customers as a FULL JOIN suppliers as b ON a.country = b.country 
+        ORDER BY customercountry, suppliercountry;
+        """
+    cur.execute(sql)
+    return cur.fetchall()

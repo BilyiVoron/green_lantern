@@ -224,9 +224,6 @@ class TestSQLQueries(unittest.TestCase):
         for i, row in enumerate(actual_result):
             self.assertDictEqual(row, expected_result[i])
 
-        print("\n!!!!!!!!!!!!!!!!!!")
-        print(actual_result)
-
     def test_task_15(self):
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             actual_result = task_15_list_customers_with_any_order_or_not(cursor)
