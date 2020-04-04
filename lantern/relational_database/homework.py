@@ -77,9 +77,8 @@ def task_5_delete_the_last_customer(conn) -> None:
     Args:
         conn: psycopg connection
     """
-    del_sql = """DELETE FROM customers WHERE customerid = 91;"""
     cur = conn.cursor()
-    cur.execute(del_sql)
+    cur.execute("DELETE FROM customers WHERE customerid = (SELECT MAX(customerid) FROM customers);")
     conn.commit()
 
 
@@ -157,7 +156,7 @@ def task_11_list_customers_starting_from_11th(cur) -> list:
 
     Returns: 90 records
     """
-    cur.execute("SELECT * FROM customers WHERE customerid > 11;")
+    cur.execute("SELECT * FROM customers ORDER BY customerid OFFSET 11;")
     return cur.fetchall()
 
 
@@ -171,7 +170,9 @@ def task_12_list_suppliers_from_specified_countries(cur):
     Returns: 8 records
     """
     sql = """
-    SELECT supplierid, suppliername, contactname, city, country FROM suppliers WHERE country IN ('USA', 'UK', 'Japan');
+    SELECT supplierid, suppliername, contactname, city, country
+    FROM suppliers
+    WHERE country IN ('USA', 'UK', 'Japan');
     """
     cur.execute(sql)
     return cur.fetchall()
