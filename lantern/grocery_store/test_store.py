@@ -47,7 +47,7 @@ class TestUsers(Initializer):
         assert resp.status_code == 404
         assert resp.json == {"error": "No such user_id 1"}
 
-    def test_successful_change_user(self):
+    def test_successful_update_user(self):
         resp = self.client.post(
             "/users",
             json={"name": "John Doe"}
@@ -91,16 +91,29 @@ class TestGoods(Initializer):
         assert resp.status_code == 201
         assert resp.json == {"numbers_of_items_created": 10}
 
-    def test_get_goods(self):
-        resp = self.client.post(
+    def test_get_good(self):
+        self.client.post(
             "/goods",
             json=[
                 {"name": "Chocolate_bar", "price": 10},
             ]
         )
-        good_id = resp.json["good_id"]
+        good_id = 1
         resp = self.client.get(f"/goods/{good_id}")
         assert resp.status_code == 200
         assert resp.json == {"name": "Chocolate_bar", "price": 10, "good_id": 1}
-        # assert resp.status_code == 201
-        # assert resp.json == {"numbers_of_items_created": 10}
+
+    def test_update_good(self):
+        self.client.post(
+            "/goods",
+            json=[
+                {"name": "Chocolate_bar", "price": 10},
+            ]
+        )
+        good_id = 1
+        resp = self.client.put(
+            f"/goods/{good_id}",
+            json={"name": "Chocolate_bar", "price": 11, "good_id": 1}
+        )
+        assert resp.status_code == 200
+        assert resp.json == {"successfully_updated": 1}

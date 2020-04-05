@@ -19,7 +19,6 @@ def id_error_handler(e):
 def create_user():
     db = inject.instance("DB")
     user_id = db.users.add(request.json)
-    # __import__("pdb").set_trace()
 
     return jsonify({"user_id": user_id}), 201
 
@@ -43,15 +42,24 @@ def update_user(user_id):
 @app.route("/goods", methods=["POST"])
 def create_good():
     db = inject.instance("DB")
-    number_of_goods = db.goods.add(request.json)
+    goods = db.goods.add(request.json)
     # __import__("pdb").set_trace()
 
-    return jsonify({"numbers_of_items_created": number_of_goods}), 201
+    return jsonify({"numbers_of_items_created": len(goods)}), 201
 
 
-@app.route("/goods<int:good_id>")
+@app.route("/goods/<int:good_id>")
 def get_good(good_id):
     db = inject.instance("DB")
-    good = db.users.get_good_by_id(good_id)
+    good = db.goods.get_good_by_id(good_id)
 
     return jsonify(good)
+
+
+@app.route("/goods/<int:good_id>", methods=["PUT"])
+def update_good(good_id):
+    db = inject.instance("DB")
+    db.goods.update_good_by_id(good_id, request.json)
+
+    return jsonify({"successfully_updated": 1})
+

@@ -41,18 +41,19 @@ class FakeUsers:
 
 class FakeGoods:
     def __init__(self):
-        self._goods = []
+        self._goods = {}
         self._id_counter = count(1)
 
     def add(self, goods):
-        for good in goods:
-            self._goods.append(good)
-        return len(self._goods)
+        for good_id, good in enumerate(goods, start=1):
+            good["good_id"] = good_id
+            self._goods[good_id] = good
+        return self._goods
 
     def get_good_by_id(self, good_id):
-        return self._goods[good_id]
+        return self._goods.get(good_id, {})
 
     def update_good_by_id(self, good_id, good):
         if good_id in self._goods:
-            self._goods[good_id] = good
+            self._goods[good_id].update(good)
 
