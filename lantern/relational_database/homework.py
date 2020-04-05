@@ -23,7 +23,6 @@ def task_1_add_new_record_to_db(conn) -> None:
            f"VALUES {values};")
     with conn.cursor() as cur:
         cur.execute(sql)
-        conn.commit()
 
 
 def task_2_list_all_customers(cur) -> list:
@@ -79,7 +78,6 @@ def task_4_update_customer(conn):
            f"(SELECT MIN({field}) FROM {table});")
     with conn.cursor() as cur:
         cur.execute(sql)
-        conn.commit()
 
 
 def task_5_delete_the_last_customer(conn) -> None:
@@ -96,7 +94,6 @@ def task_5_delete_the_last_customer(conn) -> None:
            f"(SELECT MAX({field}) FROM {table});")
     with conn.cursor() as cur:
         cur.execute(sql)
-        conn.commit()
 
 
 def task_6_list_all_supplier_countries(cur) -> list:
