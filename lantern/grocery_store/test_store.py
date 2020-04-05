@@ -1,5 +1,5 @@
 import inject
-
+import pytest
 from store_app import app
 from fake_storage import FakeStorage
 
@@ -60,7 +60,47 @@ class TestUsers(Initializer):
         assert resp.status_code == 200
         assert resp.json == {"status": "success"}
 
-    def test_update_unexistent_user(self):
-        resp = self.client.get(f"/users/5")
+    @pytest.mark.parametrize(
+        "current_user_id,expected_user_id",
+        ((1, 5),)
+    )
+    def test_update_unexistent_user(self, current_user_id, expected_user_id):
+        resp = self.client.get(f"/users/{expected_user_id}")
+        assert current_user_id != expected_user_id
         assert resp.status_code == 404
         assert resp.json == {"error": "No such user_id 5"}
+
+
+class TestGoods(Initializer):
+    def test_create_goods(self):
+        resp = self.client.post(
+            "/goods",
+            json=[
+                {"name": "Chocolate_bar", "price": 10},
+                {"name": "Milk_jar", "price": 15},
+                {"name": "Ice-cream", "price": 25},
+                {"name": "Honey", "price": 50},
+                {"name": "Cheese", "price": 26},
+                {"name": "Beetroot", "price": 2},
+                {"name": "Potato", "price": 3.5},
+                {"name": "Sugar", "price": 7.8},
+                {"name": "Salt", "price": 3},
+                {"name": "Water", "price": 6},
+            ]
+        )
+        assert resp.status_code == 201
+        assert resp.json == {"numbers_of_items_created": 10}
+
+    def test_get_goods(self):
+        resp = self.client.post(
+            "/goods",
+            json=[
+                {"name": "Chocolate_bar", "price": 10},
+            ]
+        )
+        good_id = resp.json["good_id"]
+        resp = self.client.get(f"/goods/{good_id}")
+        assert resp.status_code == 200
+        assert resp.json == {"name": "Chocolate_bar", "price": 10, "good_id": 1}
+        # assert resp.status_code == 201
+        # assert resp.json == {"numbers_of_items_created": 10}

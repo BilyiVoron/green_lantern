@@ -5,10 +5,15 @@ from store_app import NoSuchUserError
 class FakeStorage:
     def __init__(self):
         self._users = FakeUsers()
+        self._goods = FakeGoods()
 
     @property
     def users(self):
         return self._users
+
+    @property
+    def goods(self):
+        return self._goods
 
 
 class FakeUsers:
@@ -33,4 +38,21 @@ class FakeUsers:
         else:
             raise NoSuchUserError(user_id)
 
+
+class FakeGoods:
+    def __init__(self):
+        self._goods = []
+        self._id_counter = count(1)
+
+    def add(self, goods):
+        for good in goods:
+            self._goods.append(good)
+        return len(self._goods)
+
+    def get_good_by_id(self, good_id):
+        return self._goods[good_id]
+
+    def update_good_by_id(self, good_id, good):
+        if good_id in self._goods:
+            self._goods[good_id] = good
 

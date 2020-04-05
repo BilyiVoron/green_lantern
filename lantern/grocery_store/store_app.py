@@ -38,3 +38,20 @@ def update_user(user_id):
     db.users.update_user_by_id(user_id, request.json)
 
     return jsonify({"status": "success"})
+
+
+@app.route("/goods", methods=["POST"])
+def create_good():
+    db = inject.instance("DB")
+    number_of_goods = db.goods.add(request.json)
+    # __import__("pdb").set_trace()
+
+    return jsonify({"numbers_of_items_created": number_of_goods}), 201
+
+
+@app.route("/goods<int:good_id>")
+def get_good(good_id):
+    db = inject.instance("DB")
+    good = db.users.get_good_by_id(good_id)
+
+    return jsonify(good)
