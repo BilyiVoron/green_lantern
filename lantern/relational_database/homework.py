@@ -16,13 +16,14 @@ def task_1_add_new_record_to_db(conn) -> None:
     Returns: 92 records
 
     """
-    sql = """
-    INSERT INTO customers (customername, contactname, address, city, postalcode, country)
-    VALUES ('Thomas', 'David', 'Some Address', 'London', '774', 'Singapore');
-    """
-    cur = conn.cursor()
-    cur.execute(sql)
-    conn.commit()
+    fields = "customername, contactname, address, city, postalcode, country"
+    table = "customers"
+    values = ("Thomas", "David", "Some Address", "London", "774", "Singapore")
+    sql = (f"INSERT INTO {table} ({fields}) "
+           f"VALUES {values};")
+    with conn.cursor() as cur:
+        cur.execute(sql)
+        conn.commit()
 
 
 def task_2_list_all_customers(cur) -> list:
@@ -35,7 +36,11 @@ def task_2_list_all_customers(cur) -> list:
     Returns: 91 records
 
     """
-    cur.execute("SELECT * FROM customers;")
+    table = "customers"
+    fields = "*"
+    sql = (f"SELECT {fields} "
+           f"FROM {table};")
+    cur.execute(sql)
     return cur.fetchall()
 
 
@@ -48,7 +53,12 @@ def task_3_list_customers_in_germany(cur) -> list:
 
     Returns: 11 records
     """
-    cur.execute("SELECT * FROM customers WHERE country = 'Germany';")
+    table = "customers"
+    fields = "*"
+    conditions = "country = 'Germany'"
+    sql = (f"SELECT {fields} FROM {table} "
+           f"WHERE {conditions};")
+    cur.execute(sql)
     return cur.fetchall()
 
 
@@ -61,13 +71,15 @@ def task_4_update_customer(conn):
     Returns: 91 records with updated customer
 
     """
-    sql = """
-    UPDATE customers SET customername = 'Johnny Depp'
-    WHERE customerid = (SELECT MIN(customerid) FROM customers);
-    """
-    cur = conn.cursor()
-    cur.execute(sql)
-    conn.commit()
+    table = "customers"
+    field = "customerid"
+    conditions = "customername = 'Johnny Depp'"
+    sql = (f"UPDATE {table} SET {conditions} "
+           f"WHERE {field} = "
+           f"(SELECT MIN({field}) FROM {table});")
+    with conn.cursor() as cur:
+        cur.execute(sql)
+        conn.commit()
 
 
 def task_5_delete_the_last_customer(conn) -> None:
@@ -77,9 +89,14 @@ def task_5_delete_the_last_customer(conn) -> None:
     Args:
         conn: psycopg connection
     """
-    cur = conn.cursor()
-    cur.execute("DELETE FROM customers WHERE customerid = (SELECT MAX(customerid) FROM customers);")
-    conn.commit()
+    table = "customers"
+    field = "customerid"
+    sql = (f"DELETE FROM {table} "
+           f"WHERE {field} = "
+           f"(SELECT MAX({field}) FROM {table});")
+    with conn.cursor() as cur:
+        cur.execute(sql)
+        conn.commit()
 
 
 def task_6_list_all_supplier_countries(cur) -> list:
@@ -92,7 +109,11 @@ def task_6_list_all_supplier_countries(cur) -> list:
     Returns: 29 records
 
     """
-    cur.execute("SELECT country FROM suppliers;")
+    table = "suppliers"
+    field = "country"
+    sql = (f"SELECT {field} "
+           f"FROM {table};")
+    cur.execute(sql)
     return cur.fetchall()
 
 
@@ -106,7 +127,12 @@ def task_7_list_supplier_countries_in_desc_order(cur) -> list:
     Returns: 29 records in descending order
 
     """
-    cur.execute("SELECT country FROM suppliers ORDER BY country DESC;")
+    table = "suppliers"
+    field = "country"
+    sql = (f"SELECT {field} "
+           f"FROM {table} "
+           f"ORDER BY {field} DESC;")
+    cur.execute(sql)
     return cur.fetchall()
 
 
@@ -120,7 +146,14 @@ def task_8_count_customers_by_city(cur) -> list:
     Returns: 69 records
 
     """
-    cur.execute("SELECT COUNT(customerid), city FROM customers GROUP BY city ORDER BY city DESC;")
+    table = "customers"
+    field = "city"
+    count_field = "customerid"
+    sql = (f"SELECT COUNT({count_field}), city "
+           f"FROM {table} "
+           f"GROUP BY {field} "
+           f"ORDER BY {field} DESC;")
+    cur.execute(sql)
     return cur.fetchall()
 
 
@@ -133,7 +166,14 @@ def task_9_count_customers_by_country_with_than_10_customers(cur) -> list:
 
     Returns: 3 records
     """
-    cur.execute("SELECT COUNT(*), country FROM customers GROUP BY country HAVING COUNT(*) > 10;")
+    table = "customers"
+    field = "country"
+    count_fields = "*"
+    sql = (f"SELECT COUNT({count_fields}), {field} "
+           f"FROM {table} "
+           f"GROUP BY {field} "
+           f"HAVING COUNT({count_fields}) > 10;")
+    cur.execute(sql)
     return cur.fetchall()
 
 
@@ -143,7 +183,14 @@ def task_10_list_first_10_customers(cur) -> list:
 
     Results: 10 records
     """
-    cur.execute("SELECT * FROM customers ORDER BY customerid LIMIT 10;")
+    table = "customers"
+    fields = "*"
+    order_field = "customerid"
+    sql = (f"SELECT {fields} "
+           f"FROM {table} "
+           f"ORDER BY {order_field} "
+           f"LIMIT 10;")
+    cur.execute(sql)
     return cur.fetchall()
 
 
@@ -156,7 +203,14 @@ def task_11_list_customers_starting_from_11th(cur) -> list:
 
     Returns: 90 records
     """
-    cur.execute("SELECT * FROM customers ORDER BY customerid OFFSET 11;")
+    table = "customers"
+    fields = "*"
+    order_field = "customerid"
+    sql = (f"SELECT {fields} "
+           f"FROM {table} "
+           f"ORDER BY {order_field} "
+           f"OFFSET 11;")
+    cur.execute(sql)
     return cur.fetchall()
 
 
@@ -169,11 +223,13 @@ def task_12_list_suppliers_from_specified_countries(cur):
 
     Returns: 8 records
     """
-    sql = """
-    SELECT supplierid, suppliername, contactname, city, country
-    FROM suppliers
-    WHERE country IN ('USA', 'UK', 'Japan');
-    """
+    table = "suppliers"
+    fields = "supplierid, suppliername, contactname, city, country"
+    condition_field = "country"
+    conditions = ("USA", "UK", "Japan")
+    sql = (f"SELECT {fields} "
+           f"FROM {table} "
+           f"WHERE {condition_field} IN {conditions};")
     cur.execute(sql)
     return cur.fetchall()
 
@@ -187,10 +243,13 @@ def task_13_list_products_from_sweden_suppliers(cur) -> list:
 
     Returns: 3 records
     """
-    sql = """
-    SELECT products.productname FROM products, suppliers
-    WHERE country = 'Sweden' AND products.supplierid = suppliers.supplierid;
-    """
+    table_1 = "products"
+    table_2 = "suppliers"
+    field_table_1 = "products.productname"
+    conditions = "country = 'Sweden' AND products.supplierid = suppliers.supplierid"
+    sql = (f"SELECT {field_table_1} "
+           f"FROM {table_1}, {table_2} "
+           f"WHERE {conditions};")
     cur.execute(sql)
     return cur.fetchall()
 
@@ -204,11 +263,15 @@ def task_14_list_products_with_supplier_information(cur) -> list:
 
     Returns: 77 records
     """
-    sql = """
-    SET LOCAL lc_monetary = 'en_US.UTF-8';
-    SELECT productid, productname, unit, price, country, city, suppliername
-    FROM products, suppliers WHERE products.supplierid = suppliers.supplierid;
-    """
+    table_1 = "products"
+    table_2 = "suppliers"
+    fields = "productid, productname, unit, price, country, city, suppliername"
+    conditions = "products.supplierid = suppliers.supplierid"
+    change_money = "SET LOCAL lc_monetary = 'en_US.UTF-8'"
+    sql = (f"{change_money}; "
+           f"SELECT {fields} "
+           f"FROM {table_1}, {table_2} "
+           f"WHERE {conditions};")
     cur.execute(sql)
     return cur.fetchall()
 
@@ -222,10 +285,13 @@ def task_15_list_customers_with_any_order_or_not(cur) -> list:
 
     Returns: 213 records
     """
-    sql = """
-    SELECT customername, contactname, country, orderid
-    FROM customers, orders WHERE customers.customerid = orders.customerid;
-    """
+    table_1 = "customers"
+    table_2 = "orders"
+    fields = "customername, contactname, country, orderid"
+    conditions = "customers.customerid = orders.customerid"
+    sql = (f"SELECT {fields} "
+           f"FROM {table_1}, {table_2} "
+           f"WHERE {conditions};")
     cur.execute(sql)
     return cur.fetchall()
 
@@ -239,11 +305,15 @@ def task_16_match_all_customers_and_suppliers_by_country(cur) -> list:
 
     Returns: 194 records
     """
-    sql = """
-        SELECT customername, a.address as address, a.country as customercountry, 
-        b.country as suppliercountry, b.suppliername 
-        FROM customers as a FULL JOIN suppliers as b ON a.country = b.country 
-        ORDER BY customercountry, suppliercountry;
-        """
+    table_1 = "customers"
+    table_2 = "suppliers"
+    conditions = "a.country = b.country"
+    order_fields = "customercountry, suppliercountry"
+    sql = (f"SELECT a.customername, "
+           f"a.address as address, "
+           f"a.country as customercountry, "
+           f"b.country as suppliercountry, b.suppliername "
+           f"FROM {table_1} as a FULL JOIN {table_2} as b ON {conditions} "
+           f"ORDER BY {order_fields};")
     cur.execute(sql)
     return cur.fetchall()
