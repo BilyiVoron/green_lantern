@@ -117,3 +117,56 @@ class TestGoods(Initializer):
         )
         assert resp.status_code == 200
         assert resp.json == {"successfully_updated": 1}
+
+
+class TestStores(Initializer):
+    def test_create_store(self):
+        resp = self.client.post(
+            "/stores",
+            json={"name": "Mad Cow", "location": "Lviv", "manager_id": 2}
+        )
+        assert resp.status_code == 201
+        assert resp.json == {"store_id": 1}
+        # resp = self.client.post(
+        #     "/stores",
+        #     json={"name": "Bohdan Dats'ko"}
+        # )
+        # assert resp.json == {"store_id": 2}
+
+    def test_successful_get_store(self):
+        resp = self.client.post(
+            "/stores",
+            json={"name": "Mad Cow", "location": "Lviv", "manager_id": 2}
+        )
+        store_id = resp.json["store_id"]
+        resp = self.client.get(f"/stores/{store_id}")
+        assert resp.status_code == 200
+        assert resp.json == {"name": "Mad Cow", "location": "Lviv", "manager_id": 2}
+
+    def test_get_unexistent_store(self):
+        resp = self.client.get(f"/stores/1")
+        assert resp.status_code == 404
+        assert resp.json == {"error": "No such store_id 1"}
+
+    def test_successful_update_store(self):
+        resp = self.client.post(
+            "/stores",
+            json={"name": "Mad Cow", "location": "Lviv", "manager_id": 2}
+        )
+        store_id = resp.json["store_id"]
+        resp = self.client.put(
+            f"/stores/{store_id}",
+            json={"name": "Local Taste", "location": "Lviv", "manager_id": 2}
+        )
+        assert resp.status_code == 200
+        assert resp.json == {"status": "success"}
+
+    @pytest.mark.parametrize(
+        "current_store_id,expected_store_id",
+        ((1, 5),)
+    )
+    def test_update_unexistent_store(self, current_store_id, expected_store_id):
+        resp = self.client.get(f"/stores/{expected_store_id}")
+        assert current_store_id != expected_store_id
+        assert resp.status_code == 404
+        assert resp.json == {"error": "No such store_id 5"}

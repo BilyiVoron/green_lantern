@@ -7,11 +7,31 @@ class NoSuchUserError(Exception):
         self.message = f"No such user_id {user_id}"
 
 
+class NoSuchStoreError(Exception):
+    def __init__(self, store_id):
+        self.message = f"No such store_id {store_id}"
+
+
+class NoSuchManagerError(Exception):
+    def __init__(self, manager_id):
+        self.message = f"No such manager_id {manager_id}"
+
+
 app = Flask(__name__)
 
 
 @app.errorhandler(NoSuchUserError)
-def id_error_handler(e):
+def user_id_error_handler(e):
+    return jsonify({"error": e.message}), 404
+
+
+@app.errorhandler(NoSuchStoreError)
+def store_id_error_handler(e):
+    return jsonify({"error": e.message}), 404
+
+
+@app.errorhandler(NoSuchManagerError)
+def manager_id_error_handler(e):
     return jsonify({"error": e.message}), 404
 
 
@@ -62,4 +82,28 @@ def update_good(good_id):
     db.goods.update_good_by_id(good_id, request.json)
 
     return jsonify({"successfully_updated": 1})
+
+
+@app.route("/stores", methods=["POST"])
+def create_store():
+    db = inject.instance("DB")
+    store_id = db.stores.add(request.json)
+
+    return jsonify({"store_id": store_id}), 201
+
+
+@app.route("/stores/<int:store_id>")
+def get_store(store_id):
+    db = inject.instance("DB")
+    store = db.stores.get_store_by_id(store_id)
+
+    return jsonify(store)
+
+
+@app.route("/stores/<int:store_id>", methods=["PUT"])
+def update_store(store_id):
+    db = inject.instance("DB")
+    db.stores.update_store_by_id(store_id, request.json)
+
+    return jsonify({"status": "success"})
 
