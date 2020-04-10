@@ -58,9 +58,32 @@ class FakeGoods:
     def get_good_by_id(self, good_id):
         return self._goods.get(good_id, {})
 
+    def get_goods(self):
+        print("\nThis is printing self._goods!!!")
+        print(self._goods)
+        return self._goods
+
     def update_good_by_id(self, good_id, good):
         if good_id in self._goods:
             self._goods[good_id].update(good)
+
+    # def update_goods(self, good):
+    #     return [self._goods[good].update(good)]
+
+    def update_goods(self, goods):
+        success, i, error = 0, 0, []
+        for upd_good in goods:
+            good_id = upd_good["good_id"]
+            for good in self._goods:
+                if good["good_id"] == good_id:
+                    success += 1
+                    self._goods[i] = upd_good
+                else:
+                    i += 1
+            if i == len(self._goods):
+                error.append(upd_good["good_id"])
+            i = 0
+        return success, error
 
 
 class FakeStores:
