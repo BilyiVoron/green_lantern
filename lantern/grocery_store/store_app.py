@@ -12,17 +12,11 @@ class NoSuchStoreError(Exception):
         self.message = f"No such store_id {store_id}"
 
 
-class NoSuchManagerError(Exception):
-    def __init__(self, manager_id):
-        self.message = f"No such manager_id {manager_id}"
-
-
 app = Flask(__name__)
 
 
 @app.errorhandler(NoSuchUserError)
 @app.errorhandler(NoSuchStoreError)
-@app.errorhandler(NoSuchManagerError)
 def my_id_error_handler(e):
     return jsonify({"error": e.message}), 404
 
