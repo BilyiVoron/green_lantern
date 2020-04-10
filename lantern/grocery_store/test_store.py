@@ -83,6 +83,20 @@ class TestUsers(Initializer):
         assert resp.status_code == 404
         assert resp.json == {"error": "No such user_id 5"}
 
+    def test_successful_delete_user(self):
+        resp = self.client.post(self.user_route, json=self.user)
+        user_id = resp.json["user_id"]
+        resp = self.client.delete(f"{self.user_route}/{user_id}")
+        assert resp.status_code == 200
+        assert resp.json == {"status": "success"}
+
+    def test_delete_nonexistent_user(self):
+        self.client.post(self.user_route, json=self.user)
+        user_id = 15
+        resp = self.client.delete(f"{self.user_route}/{user_id}")
+        assert resp.status_code == 404
+        assert resp.json == {"error": "No such user_id 15"}
+
 
 class TestGoods(Initializer):
     def test_create_goods(self):
@@ -161,6 +175,32 @@ class TestGoods(Initializer):
             "errors": {"no such id in goods": [11, 12, 13]},
         }
 
+    def test_successful_delete_good(self):
+        self.client.post(self.good_route, json=self.goods)
+        good_id = 1
+        resp = self.client.delete(f"{self.good_route}/{good_id}")
+        assert resp.status_code == 200
+        assert resp.json == {"status": "success"}
+
+    def test_delete_some_goods(self):
+        self.client.post(self.good_route, json=self.goods)
+        resp = self.client.delete(
+            f"{self.good_route}",
+            json=[
+                {"name": "Cocoa", "price": 7.86, "good_id": 1},
+                {"name": "Sour-cream", "price": 4.45, "good_id": 2},
+                {"name": "Ice-cream", "price": 25, "good_id": 3},
+                {"name": "Sugar", "price": 7.8, "good_id": 11},
+                {"name": "Salt", "price": 3, "good_id": 12},
+                {"name": "Water", "price": 6, "good_id": 13},
+            ],
+        )
+        assert resp.status_code == 200
+        assert resp.json == {
+            "successfully_deleted": 3,
+            "errors": {"no such id in goods": [11, 12, 13]},
+        }
+
 
 class TestStores(Initializer):
     def test_create_store(self):
@@ -196,3 +236,17 @@ class TestStores(Initializer):
         resp = self.client.get(f"{self.store_route}/5")
         assert resp.status_code == 404
         assert resp.json == {"error": "No such store_id 5"}
+
+    def test_successful_delete_store(self):
+        resp = self.client.post(self.store_route, json=self.stores)
+        store_id = resp.json["store_id"]
+        resp = self.client.delete(f"{self.store_route}/{store_id}")
+        assert resp.status_code == 200
+        assert resp.json == {"status": "success"}
+
+    def test_delete_nonexistent_store(self):
+        self.client.post(self.store_route, json=self.stores)
+        store_id = 7
+        resp = self.client.delete(f"{self.store_route}/{store_id}")
+        assert resp.status_code == 404
+        assert resp.json == {"error": "No such store_id 7"}

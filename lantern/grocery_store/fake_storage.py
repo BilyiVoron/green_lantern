@@ -43,6 +43,12 @@ class FakeUsers:
         else:
             raise NoSuchUserError(user_id)
 
+    def remove_user_by_id(self, user_id):
+        if user_id in self._users:
+            self._users.pop(user_id)
+        else:
+            raise NoSuchUserError(user_id)
+
 
 class FakeGoods:
     def __init__(self):
@@ -76,6 +82,23 @@ class FakeGoods:
                 error.append(upd_good["good_id"])
         return success, error
 
+    def remove_good_by_id(self, good_id):
+        if good_id in self._goods:
+            self._goods.pop(good_id, {})
+        else:
+            raise KeyError
+
+    def remove_goods(self, goods):
+        success, error = 0, []
+        for del_good in goods:
+            good_id = del_good["good_id"]
+            if self._goods.pop(good_id, {}):
+                success += 1
+                self._goods[good_id] = del_good
+            else:
+                error.append(del_good["good_id"])
+        return success, error
+
 
 class FakeStores:
     def __init__(self):
@@ -96,5 +119,11 @@ class FakeStores:
     def update_store_by_id(self, store_id, store):
         if store_id in self._stores:
             self._stores[store_id] = store
+        else:
+            raise NoSuchStoreError(store_id)
+
+    def remove_store_by_id(self, store_id):
+        if store_id in self._stores:
+            self._stores.pop(store_id)
         else:
             raise NoSuchStoreError(store_id)

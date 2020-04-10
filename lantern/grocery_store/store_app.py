@@ -51,11 +51,18 @@ def update_user(user_id):
     return jsonify({"status": "success"})
 
 
+@app.route("/users/<int:user_id>", methods=["DELETE"])
+def delete_user(user_id):
+    db = inject.instance("DB")
+    db.users.remove_user_by_id(user_id)
+
+    return jsonify({"status": "success"})
+
+
 @app.route("/goods", methods=["POST"])
 def create_good():
     db = inject.instance("DB")
     goods = db.goods.add(request.json)
-    # __import__("pdb").set_trace()
 
     return jsonify({"numbers_of_items_created": len(goods)}), 201
 
@@ -99,6 +106,29 @@ def update_some_goods():
         return jsonify({"successfully_updated": update_count})
 
 
+@app.route("/goods/<int:good_id>", methods=["DELETE"])
+def delete_good(good_id):
+    db = inject.instance("DB")
+    db.goods.remove_good_by_id(good_id)
+
+    return jsonify({"status": "success"})
+
+
+@app.route("/goods", methods=["DELETE"])
+def delete_some_goods():
+    db = inject.instance("DB")
+    update_count, error_count = db.goods.remove_goods(request.json)
+    if error_count:
+        return jsonify(
+            {
+                "successfully_deleted": update_count,
+                "errors": {"no such id in goods": error_count},
+            }
+        )
+    else:
+        return jsonify({"successfully_deleted": update_count})
+
+
 @app.route("/stores", methods=["POST"])
 def create_store():
     db = inject.instance("DB")
@@ -119,5 +149,13 @@ def get_store(store_id):
 def update_store(store_id):
     db = inject.instance("DB")
     db.stores.update_store_by_id(store_id, request.json)
+
+    return jsonify({"status": "success"})
+
+
+@app.route("/stores/<int:store_id>", methods=["DELETE"])
+def delete_store(store_id):
+    db = inject.instance("DB")
+    db.stores.remove_store_by_id(store_id)
 
     return jsonify({"status": "success"})
