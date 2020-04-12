@@ -54,18 +54,25 @@ class FakeGoods(Repository):
         return len(items)
 
     def get_all(self):
-        return [
-            {**item, 'id': item_id} for item_id, item in self._db.items()
-        ]
+        return [{**item, "id": item_id} for item_id, item in self._db.items()]
 
 
 class FakeStores(Repository):
-
     def get_store_by_id(self, store_id):
         try:
             return self._db[store_id]
         except KeyError:
             raise NoSuchStoreError(store_id)
+
+    def get_stores_by_name(self, name):
+        for store_id, store_data in self._db.items():
+            if name == store_data["name"]:
+                return store_data
+
+        try:
+            return self._db[name]
+        except KeyError:
+            raise NoSuchStoreError(name)
 
     def update_store_by_id(self, store_id, store):
         if store_id in self._db:
