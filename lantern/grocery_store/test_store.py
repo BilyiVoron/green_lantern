@@ -251,7 +251,6 @@ class TestStores(Initializer):
         assert resp.json == {"status": "success"}
 
     def test_delete_nonexistent_store(self):
-        self.client.post(self.store_route, json=self.stores)
         store_id = 7
         resp = self.client.delete(f"{self.store_route}/{store_id}")
         assert resp.status_code == 404
