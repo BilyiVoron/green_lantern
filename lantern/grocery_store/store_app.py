@@ -126,9 +126,10 @@ def delete_some_goods():
 @app.route("/stores", methods=["POST"])
 def create_store():
     db = inject.instance("DB")
-    store_id = db.stores.add(request.json)
+    if db.users.get_user_by_id(request.json["manager_id"]):
+        store_id = db.stores.add(request.json)
 
-    return jsonify({"store_id": store_id}), 201
+        return jsonify({"store_id": store_id}), 201
 
 
 @app.route("/stores/<int:store_id>")
