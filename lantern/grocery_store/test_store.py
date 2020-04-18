@@ -43,17 +43,21 @@ class Initializer:
 
     @staticmethod
     def setup_store():
-        return {"name": "Mad Cow", "location": "Lviv", "manager_id": 1}
+        client = app.test_client()
+        user_route = "/users"
+        resp = client.post(user_route, json={"name": "John Doe"})
+        user_id = resp.json["user_id"]
+        return {"name": "Mad Cow", "location": "Lviv", "manager_id": user_id}
 
 
 class TestUsers(Initializer):
     def test_create_user(self):
         resp = self.client.post(self.user_route, json=self.user)
         assert resp.status_code == 201
-        assert resp.json == {"user_id": 1}
+        assert resp.json == {"user_id": 2}
         resp = self.client.post(self.user_route, json=self.user)
         assert resp.status_code == 201
-        assert resp.json == {"user_id": 2}
+        assert resp.json == {"user_id": 3}
 
     def test_successful_get_user(self):
         resp = self.client.post(self.user_route, json=self.user)
@@ -79,7 +83,10 @@ class TestUsers(Initializer):
 
     def test_update_nonexistent_user(self):
         self.client.post(self.user_route, json=self.user)
-        resp = self.client.get(f"{self.user_route}/5")
+        user_id = 5
+        resp = self.client.put(
+            f"{self.user_route}/{user_id}", json={"name": "Johanna Doe"}
+        )
         assert resp.status_code == 404
         assert resp.json == {"error": "No such user_id 5"}
 
@@ -204,19 +211,16 @@ class TestGoods(Initializer):
 
 class TestStores(Initializer):
     def test_create_store(self):
-        self.client.post(self.user_route, json=self.user)
         resp = self.client.post(self.store_route, json=self.stores)
         assert resp.status_code == 201
         assert resp.json == {"store_id": 1}
 
     def test_successful_get_store(self):
-        resp_user = self.client.post(self.user_route, json=self.user)
-        user_id = resp_user.json["user_id"]
         resp = self.client.post(self.store_route, json=self.stores)
         store_id = resp.json["store_id"]
         resp = self.client.get(f"{self.store_route}/{store_id}")
         assert resp.status_code == 200
-        assert resp.json == {"name": "Mad Cow", "location": "Lviv", "manager_id": user_id}
+        assert resp.json == {"name": "Mad Cow", "location": "Lviv", "manager_id": 1}
 
     def test_get_nonexistent_store(self):
         self.client.post(self.store_route, json=self.stores)
@@ -225,25 +229,38 @@ class TestStores(Initializer):
         assert resp.json == {"error": "No such store_id 2"}
 
     def test_successful_update_store(self):
-        resp_user = self.client.post(self.user_route, json=self.user)
-        user_id = resp_user.json["user_id"]
         resp = self.client.post(self.store_route, json=self.stores)
         store_id = resp.json["store_id"]
         resp = self.client.put(
             f"{self.store_route}/{store_id}",
-            json={"name": "Local Taste", "location": "Lviv", "manager_id": user_id},
+
+            json={"name": "Local Taste", "location": "Lviv", "manager_id": 1},
         )
         assert resp.status_code == 200
         assert resp.json == {"status": "success"}
 
+    def test_update_store_with_nonexistent_user(self):
+        resp = self.client.post(self.store_route, json=self.stores)
+        store_id = resp.json["store_id"]
+        resp = self.client.put(
+            f"{self.store_route}/{store_id}",
+
+            json={"name": "Local Taste", "location": "Lviv", "manager_id": 2},
+        )
+        assert resp.status_code == 404
+        assert resp.json == {"error": "No such user_id 2"}
+
     def test_update_nonexistent_store(self):
         self.client.post(self.store_route, json=self.stores)
-        resp = self.client.get(f"{self.store_route}/5")
+        store_id = 5
+        resp = self.client.put(
+            f"{self.store_route}/{store_id}",
+            json={"name": "Local Taste", "location": "Lviv", "manager_id": 1},
+        )
         assert resp.status_code == 404
         assert resp.json == {"error": "No such store_id 5"}
 
     def test_successful_delete_store(self):
-        self.client.post(self.user_route, json=self.user)
         resp = self.client.post(self.store_route, json=self.stores)
         store_id = resp.json["store_id"]
         resp = self.client.delete(f"{self.store_route}/{store_id}")

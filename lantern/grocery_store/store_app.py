@@ -143,9 +143,10 @@ def get_store(store_id):
 @app.route("/stores/<int:store_id>", methods=["PUT"])
 def update_store(store_id):
     db = inject.instance("DB")
-    db.stores.update_store_by_id(store_id, request.json)
+    if db.users.get_user_by_id(request.json["manager_id"]):
+        db.stores.update_store_by_id(store_id, request.json)
 
-    return jsonify({"status": "success"})
+        return jsonify({"status": "success"})
 
 
 @app.route("/stores/<int:store_id>", methods=["DELETE"])
