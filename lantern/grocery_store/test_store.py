@@ -68,7 +68,8 @@ class TestUsers(Initializer):
 
     def test_get_nonexistent_user(self):
         self.client.post(self.user_route, json=self.user)
-        resp = self.client.get(f"{self.user_route}/3")
+        user_id = 3
+        resp = self.client.get(f"{self.user_route}/{user_id}")
         assert resp.status_code == 404
         assert resp.json == {"error": "No such user_id 3"}
 
@@ -122,6 +123,13 @@ class TestGoods(Initializer):
         assert resp.status_code == 200
         assert resp.json == {"name": "Chocolate_bar", "price": 10, "good_id": good_id}
 
+    def test_get_nonexistent_good(self):
+        self.client.post(self.good_route, json=self.goods)
+        good_id = 375
+        resp = self.client.get(f"{self.good_route}/{good_id}")
+        assert resp.status_code == 404
+        assert resp.json == {"error": "No such good_id 375"}
+
     def test_get_all_goods(self):
         self.client.post(self.good_route, json=self.goods)
         resp = self.client.get(self.good_route, json=self.goods)
@@ -156,6 +164,16 @@ class TestGoods(Initializer):
         assert resp.status_code == 200
         assert resp.json == {"successfully_updated": 1}
 
+    def test_update_nonexistent_good(self):
+        self.client.post(self.good_route, json=self.goods)
+        good_id = 11
+        resp = self.client.put(
+            f"{self.good_route}/{good_id}",
+            json={"name": "Cocoa", "price": 11, "good_id": good_id},
+        )
+        assert resp.status_code == 404
+        assert resp.json == {"error": "No such good_id 11"}
+
     def test_update_some_goods(self):
         self.client.post(self.good_route, json=self.goods)
         resp = self.client.put(
@@ -188,6 +206,13 @@ class TestGoods(Initializer):
         resp = self.client.delete(f"{self.good_route}/{good_id}")
         assert resp.status_code == 200
         assert resp.json == {"status": "success"}
+
+    def test_delete_nonexistent_good(self):
+        self.client.post(self.good_route, json=self.goods)
+        good_id = 486
+        resp = self.client.delete(f"{self.good_route}/{good_id}")
+        assert resp.status_code == 404
+        assert resp.json == {"error": "No such good_id 486"}
 
     def test_delete_some_goods(self):
         self.client.post(self.good_route, json=self.goods)

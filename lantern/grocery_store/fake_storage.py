@@ -63,16 +63,14 @@ class FakeGoods:
         return self._goods
 
     def get_good_by_id(self, good_id):
+        # return self._goods.get(good_id, {"error": f"No such good_id {good_id}"})
         try:
-            return self._goods.get(good_id, {})
+            return self._goods[good_id]
         except KeyError:
             raise NoSuchGoodError(good_id)
 
     def get_goods(self):
-        try:
-            return list(self._goods.values())
-        except KeyError:
-            raise NoSuchGoodError
+        return list(self._goods.values())
 
     def update_good_by_id(self, good_id, good):
         if good_id in self._goods:
