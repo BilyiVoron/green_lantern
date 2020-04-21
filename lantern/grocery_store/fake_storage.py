@@ -1,5 +1,6 @@
 from itertools import count
-from store_app import NoSuchUserError, NoSuchStoreError
+
+from store_app import NoSuchUserError, NoSuchGoodError, NoSuchStoreError
 
 
 class FakeStorage:
@@ -62,14 +63,22 @@ class FakeGoods:
         return self._goods
 
     def get_good_by_id(self, good_id):
-        return self._goods.get(good_id, {})
+        try:
+            return self._goods.get(good_id, {})
+        except KeyError:
+            raise NoSuchGoodError(good_id)
 
     def get_goods(self):
-        return list(self._goods.values())
+        try:
+            return list(self._goods.values())
+        except KeyError:
+            raise NoSuchGoodError
 
     def update_good_by_id(self, good_id, good):
         if good_id in self._goods:
             self._goods[good_id].update(good)
+        else:
+            raise NoSuchGoodError(good_id)
 
     def update_goods(self, goods):
         success, error = 0, []
@@ -86,7 +95,7 @@ class FakeGoods:
         if good_id in self._goods:
             self._goods.pop(good_id, {})
         else:
-            raise KeyError
+            raise NoSuchGoodError(good_id)
 
     def remove_goods(self, goods):
         success, error = 0, []

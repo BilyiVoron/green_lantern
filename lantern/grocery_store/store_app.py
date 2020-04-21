@@ -1,10 +1,15 @@
-from flask import Flask, jsonify, request
 import inject
+from flask import Flask, jsonify, request
 
 
 class NoSuchUserError(Exception):
     def __init__(self, user_id):
         self.message = f"No such user_id {user_id}"
+
+
+class NoSuchGoodError(Exception):
+    def __init__(self, good_id):
+        self.message = f"No such good_id {good_id}"
 
 
 class NoSuchStoreError(Exception):
@@ -16,6 +21,7 @@ app = Flask(__name__)
 
 
 @app.errorhandler(NoSuchUserError)
+@app.errorhandler(NoSuchGoodError)
 @app.errorhandler(NoSuchStoreError)
 def my_id_error_handler(e):
     return jsonify({"error": e.message}), 404
