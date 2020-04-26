@@ -2,9 +2,9 @@ import inject
 from flask import Flask
 from flask_restful import Api
 
-from errors import NoSuchUserError, my_error_handler, NoSuchStoreError
+from errors import my_error_handler, NoSuchUserError, NoSuchStoreError, NoSuchGoodError
 from fake_storage import FakeStorage
-from routes import goods_bl
+from routes.goods import Good
 from routes.stores import Store
 from routes.users import User
 
@@ -21,11 +21,11 @@ def make_app():
     app = Flask(__name__)
     # API
     api = Api(app)
-    api.add_resource(Store, "/stores", "/stores/<int:store_id>")
     api.add_resource(User, "/users", "/users/<int:user_id>")
-    # register blueprints and error handlers
-    app.register_blueprint(goods_bl)
-
+    api.add_resource(Good, "/goods", "/goods/<int:good_id>")
+    api.add_resource(Store, "/stores", "/stores/<int:store_id>")
+    # error handlers
     app.register_error_handler(NoSuchUserError, my_error_handler)
     app.register_error_handler(NoSuchStoreError, my_error_handler)
+    app.register_error_handler(NoSuchGoodError, my_error_handler)
     return app

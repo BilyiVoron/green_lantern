@@ -22,10 +22,17 @@ class Store(Resource):
 
     def post(self):
         db = inject.instance("DB")
-        store_id = db.stores.add(request.json)
-        return {"store_id": store_id}, 201
+        if db.users.get_user_by_id(request.json["manager_id"]):
+            store_id = db.stores.add(request.json)
+            return {"store_id": store_id}, 201
 
     def put(self, store_id):
         db = inject.instance("DB")
-        db.stores.update_store_by_id(store_id, request.json)
+        if db.users.get_user_by_id(request.json["manager_id"]):
+            db.stores.update_store_by_id(store_id, request.json)
+            return {"status": "success"}
+
+    def delete(self, store_id):
+        db = inject.instance("DB")
+        db.stores.remove_store_by_id(store_id)
         return {"status": "success"}

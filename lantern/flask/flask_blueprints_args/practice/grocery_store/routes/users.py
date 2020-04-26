@@ -1,5 +1,5 @@
 import inject
-from flask import Blueprint, request, jsonify
+from flask import request
 from flask_restful import Resource
 
 
@@ -18,4 +18,10 @@ class User(Resource):
         db = inject.instance("DB")
         db.users.update_user_by_id(user_id, request.json)
         return {"status": "success"}
+
+    def delete(self, user_id):
+        db = inject.instance("DB")
+        db.users.remove_user_by_id(user_id)
+        return {"status": "success"}
+
 
