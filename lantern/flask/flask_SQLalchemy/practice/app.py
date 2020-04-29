@@ -27,7 +27,7 @@ with app.app_context():
         db.create_all()
         print("Database exists")
     else:
-        print(f"Database doesn't exists {db.engine.url}")
+        print(f"Database does not exists {db.engine.url}")
         create_database(db.engine.url)
         print("Database successfully created")
 
