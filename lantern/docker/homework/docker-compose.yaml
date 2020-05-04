@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  web:
+    build: .
+    command: python wsgi.py
+    ports:
+      - 8000:5000
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=cursor
+      - POSTGRES_PASSWORD=very_secret_password
+      - POSTGRES_DB=docker_practice
+    ports:
+      - 5432:5433
