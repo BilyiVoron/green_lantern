@@ -1,4 +1,4 @@
-from homework.app.app import get_app
+from app.app import get_app
 
 app = get_app()
 

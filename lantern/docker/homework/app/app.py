@@ -18,6 +18,7 @@ def get_app():
         else:
             print(f"Database does not exists {db.engine.url}")
             create_database(db.engine.url)
+            db.create_all()
             print("Database successfully created")
 
     with app.app_context():
