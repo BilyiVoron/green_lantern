@@ -8,12 +8,13 @@ services:
       - 5000:5001
     depends_on:
       - postgres
+    restart: on-failure
 
   postgres:
     image: postgres:latest
     environment:
       - POSTGRES_USER=cursor
       - POSTGRES_PASSWORD=very_secret_password
-      - POSTGRES_DB=docker_practice
+      - POSTGRES_DB=cursor_sqlalchemy_db
     ports:
       - 5432:5433
