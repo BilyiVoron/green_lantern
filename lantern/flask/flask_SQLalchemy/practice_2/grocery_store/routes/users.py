@@ -23,9 +23,9 @@ class Users(Resource):
 
     def put(self, user_id):
         user = User.query.get(user_id)
-        user.name = request.json.get('name', user.name)
-        user.email = request.json.get('email', user.email)
-        user.password = request.json.get('password', user.password)
+        user.name = request.json.get("name", user.name)
+        user.email = request.json.get("email", user.email)
+        user.password = request.json.get("password", user.password)
         db.session.commit()
         return f"Successfully updated User with id: {user_id}"
 
