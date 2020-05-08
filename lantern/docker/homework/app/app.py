@@ -14,32 +14,34 @@ def get_app():
     with app.app_context():
         if database_exists(db.engine.url):
             db.create_all()
-            print("Database exists")
+            print("\nConnecting to database...")
+            print("\nConnection succeeded")
         else:
-            print(f"Database does not exists {db.engine.url}")
+            print(f"\nDatabase does not exists {db.engine.url}")
             create_database(db.engine.url)
             db.create_all()
-            print("Database successfully created")
+            print("\nCreating database...")
+            print("\nDatabase successfully created")
 
     with app.app_context():
         users = get_users()
         for user in users:
             db.session.add(User(**user))
         db.session.commit()
-        print("Data added to database successfully")
+        print("\n\tUSERS data added to database successfully")
 
     with app.app_context():
         goods = get_goods()
         for good in goods:
             db.session.add(Good(**good))
         db.session.commit()
-        print("Data added to database successfully")
+        print("\n\tGOODS data added to database successfully")
 
     with app.app_context():
         stores = get_stores()
         for store in stores:
             db.session.add(Store(**store))
         db.session.commit()
-        print("Data added to database successfully")
+        print("\n\tSTORES data added to database successful\n")
 
     return app
