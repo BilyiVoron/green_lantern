@@ -14,4 +14,4 @@ api_stores = Api(stores)
 
 api_users.add_resource(Users, "/users", "/users/<user_id>")
 api_goods.add_resource(Goods, "/goods", "/goods/<good_id>")
-api_goods.add_resource(Stores, "/stores", "/stores/<store_id>")
+api_stores.add_resource(Stores, "/stores", "/stores/<store_id>")
