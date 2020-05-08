@@ -1,4 +1,3 @@
-import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import create_database, drop_database, database_exists
