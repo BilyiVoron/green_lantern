@@ -1,3 +1,5 @@
+import logging
+
 from flask import Flask
 from sqlalchemy_utils import create_database, database_exists
 
@@ -10,38 +12,34 @@ def get_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     db.init_app(app)
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)-6s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
 
     with app.app_context():
-        if database_exists(db.engine.url):
-            db.create_all()
-            print("\nConnecting to database...")
-            print("\nConnection succeeded")
-        else:
-            print(f"\nDatabase does not exists {db.engine.url}")
+        if not database_exists(db.engine.url):
+            logging.info(f'Database "{Config.DB_NAME}" does not exists')
             create_database(db.engine.url)
-            db.create_all()
-            print("\nCreating database...")
-            print("\nDatabase successfully created")
+            logging.info(f'Creating database "{Config.DB_NAME}"...')
+            logging.info("Database successfully created")
+        db.create_all()
+        logging.info(f'Database "{Config.DB_NAME}" exists')
+        logging.info("Connection to database...")
+        logging.info("Connection succeeded!")
 
     with app.app_context():
         users = get_users()
+        goods = get_goods()
+        stores = get_stores()
         for user in users:
             db.session.add(User(**user))
-        db.session.commit()
-        print("\n\tUSERS data added to database successfully")
-
-    with app.app_context():
-        goods = get_goods()
         for good in goods:
             db.session.add(Good(**good))
-        db.session.commit()
-        print("\n\tGOODS data added to database successfully")
-
-    with app.app_context():
-        stores = get_stores()
         for store in stores:
             db.session.add(Store(**store))
         db.session.commit()
-        print("\n\tSTORES data added to database successful\n")
+        logging.info(f"Data added to database successfully")
 
     return app
