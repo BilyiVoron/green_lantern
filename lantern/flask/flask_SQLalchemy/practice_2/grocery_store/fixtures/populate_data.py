@@ -1,14 +1,21 @@
 import csv
+import logging
 import os
 
 from grocery_store import app, db
 from grocery_store.models import User, Good, Store
-from grocery_store.config import FIXTURES_DIR
+from grocery_store.config import FIXTURES_DIR, Config
 from sqlalchemy_utils import create_database, drop_database, database_exists
 
 USERS_DIR = os.path.join(FIXTURES_DIR, "users.csv")
 GOODS_DIR = os.path.join(FIXTURES_DIR, "goods.csv")
 STORES_DIR = os.path.join(FIXTURES_DIR, "stores.csv")
+logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)-6s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        # filename="logfile.log",  # if you want!!!
+    )
 
 
 def get_users():
@@ -33,16 +40,15 @@ def get_stores():
 
 
 with app.app_context():
-    if database_exists(db.engine.url):
-        db.create_all()
-        print("\nConnecting to database...")
-        print("\nConnection succeeded")
-    else:
-        print(f"\nDatabase does not exists {db.engine.url}")
+    if not database_exists(db.engine.url):
+        logging.info(f'Database "{Config.DB_NAME}" does not exists')
         create_database(db.engine.url)
-        db.create_all()
-        print("\nCreating database...")
-        print("\nDatabase successfully created")
+        logging.info(f'Creating database "{Config.DB_NAME}"...')
+        logging.info("Database successfully created")
+    db.create_all()
+    logging.info(f'Database "{Config.DB_NAME}" exists')
+    logging.info("Connection to database...")
+    logging.info("Connection succeeded!")
 
 with app.app_context():
     users = get_users()
@@ -55,5 +61,4 @@ with app.app_context():
     for store in stores:
         db.session.add(Store(**store))
     db.session.commit()
-    print("\n\tData added to database successfully")
-
+    logging.info("Data added to database successfully")
