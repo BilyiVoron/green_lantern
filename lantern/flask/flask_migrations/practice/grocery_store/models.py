@@ -1,3 +1,7 @@
+import datetime
+
+from sqlalchemy import DateTime
+
 from grocery_store.db import db
 
 
@@ -30,3 +34,20 @@ class Store(db.Model):
     city = db.Column(db.String(), nullable=False)
     address = db.Column(db.String(), nullable=False)
     manager_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+
+
+class Order(db.Model):
+    __tablename__ = "orders"
+
+    order_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    created_time = db.Column(DateTime, default=datetime.datetime.utcnow)
+    store_id = db.Column(db.Integer, db.ForeignKey("stores.store_id"), nullable=False)
+
+
+class OrderLine(db.Model):
+    __tablename__ = "order_lines"
+
+    order_line_id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey("orders.order_id"), nullable=False)
+    good_id = db.Column(db.Integer, db.ForeignKey("goods.good_id"), nullable=False)
