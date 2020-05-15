@@ -13,11 +13,11 @@ USERS_DIR = os.path.join(FIXTURES_DIR, "users.csv")
 GOODS_DIR = os.path.join(FIXTURES_DIR, "goods.csv")
 STORES_DIR = os.path.join(FIXTURES_DIR, "stores.csv")
 logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)-6s %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-        # filename="logfile.log",  # if you want!!!
-    )
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)-6s %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    # filename="logfile.log",  # if you want!!!
+)
 
 
 def get_users():
@@ -25,7 +25,9 @@ def get_users():
         reader = csv.DictReader(f)
         users = [user for user in reader]
         for user in users:
-            user['password'] = 'sha256$TlFrkAzh$807b3e82dd1b2c6ee26e64ab8ad1ad55fc462d37e9a3b6b5bdd387530867864f'
+            user[
+                "password"
+            ] = "sha256$TlFrkAzh$807b3e82dd1b2c6ee26e64ab8ad1ad55fc462d37e9a3b6b5bdd387530867864f"
     return users
 
 
@@ -43,10 +45,10 @@ def get_stores():
     return stores
 
 
-
 class Populate(Command):
     def run(self):
         from grocery_store import app, db
+
         with app.app_context():
             users = get_users()
             goods = get_goods()
