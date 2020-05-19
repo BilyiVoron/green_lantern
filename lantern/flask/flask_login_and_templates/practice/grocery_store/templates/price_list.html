@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="title">
+        Price list
+    </h1>
+
+
+    <table class="table", align="center">
+        <thead>
+        <tr>
+            <th>brand</th>
+            <th>name</th>
+            <th>price</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for good in goods %}
+            <tr>
+                <td>{{ good["brand"] }}</td>
+                <td>{{ good["name"] }}</td>
+                <td>{{ good["price"] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
