@@ -23,6 +23,6 @@ def make_db(app):
 
 def make_manager(app):
     manager = Manager(app)
-    manager.add_command('runserver', Server(host=Config.HOST, port=Config.PORT))
-    manager.add_command('db', MigrateCommand)
+    manager.add_command("runserver", Server(host=Config.HOST, port=Config.PORT))
+    manager.add_command("db", MigrateCommand)
     return manager
