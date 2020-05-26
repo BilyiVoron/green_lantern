@@ -15,10 +15,7 @@ def index():
 @login_required
 def profile():
     return render_template(
-        "profile.html",
-        user=current_user.name,
-        email=current_user.email,
-        # stores=current_user.manage_stores,
+        "profile.html", user=current_user.name, email=current_user.email,
     )
 
 
@@ -49,7 +46,6 @@ def stores():
             "address": store.address,
         }
         user_managed_stores.append(data)
-    # if store in current_user.manage_stores:
     return render_template("stores.html", stores=user_managed_stores)
 
 
