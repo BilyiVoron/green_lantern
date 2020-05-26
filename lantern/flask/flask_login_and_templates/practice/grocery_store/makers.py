@@ -1,13 +1,13 @@
 from flask import Flask
+from flask_login import LoginManager
 from flask_migrate import MigrateCommand
 from flask_script import Server, Manager
-from flask_login import LoginManager
 
-from grocery_store.config import Config
-from grocery_store.models import User
-from grocery_store.routes import users, goods, stores, auth, main, orders
-from grocery_store.database import db
 from grocery_store.commands import Populate, PopulateOrders
+from grocery_store.config import Config
+from grocery_store.database import db
+from grocery_store.models import User
+from grocery_store.routes import users, goods, stores, auth, main
 
 
 def make_app():
@@ -18,7 +18,6 @@ def make_app():
     app.register_blueprint(stores)
     app.register_blueprint(auth)
     app.register_blueprint(main)
-    app.register_blueprint(orders)
     return app
 
 
