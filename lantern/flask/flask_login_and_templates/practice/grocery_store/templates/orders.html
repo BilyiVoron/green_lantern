@@ -16,11 +16,11 @@
         {%  for order in orders %}
                  <tr>
                     <td>{{ order["store"] }}</td>
-                    <td>{{ order["order_date"] }}</td>
+                    <td>{{ order["date"] }}</td>
                     <td></td>
                     <td></td>
                 </tr>
-            {% for key, value in order["order_goods"].items() %}
+            {% for key, value in order["goods"].items() %}
                  <tr>
                     <td></td>
                     <td></td>
@@ -33,7 +33,7 @@
                     <td></td>
                     <td></td>
                     <td><b>Order sum</b></td>
-                    <td><b>{{ order["order_price"] }}</b></td>
+                    <td><b>{{ order["price"] }}</b></td>
                 </tr>
         {% endfor %}
             <tr>

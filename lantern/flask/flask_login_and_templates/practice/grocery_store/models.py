@@ -1,6 +1,6 @@
 import datetime
-from flask_login import UserMixin
 
+from flask_login import UserMixin
 from sqlalchemy import DateTime
 
 from grocery_store.database import db
@@ -15,7 +15,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(), nullable=False)
 
     orders = db.relationship("Order", backref="user")
-    manage_stores = db.relationship("Store", backref="user")
+    manage_stores = db.relationship("Store", backref="manager")
 
     def __repr__(self):
         return f"<id: {self.user_id}, name: {self.name}, email: {self.email}>"
