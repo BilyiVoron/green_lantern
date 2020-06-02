@@ -1,3 +1,14 @@
+-- DROP DATABASE inspection_db;
+--
+-- CREATE DATABASE inspection_db;
+
+
+-- CREATE USER inspection_user WITH ENCRYPTED PASSWORD 'inspection_user';
+
+
+-- GRANT ALL PRIVILEGES ON DATABASE inspection_db TO inspection_user;
+
+
 CREATE TABLE Country (
     country_id SERIAL PRIMARY KEY NOT NULL,
     name VARCHAR(50) NOT NULL
