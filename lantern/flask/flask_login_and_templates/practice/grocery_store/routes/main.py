@@ -37,16 +37,7 @@ def orders():
 @main.route("/manage_stores")
 @login_required
 def stores():
-    user_managed_stores = []
-    for store in current_user.manage_stores:
-        data = {
-            "store_id": store.store_id,
-            "name": store.name,
-            "city": store.city,
-            "address": store.address,
-        }
-        user_managed_stores.append(data)
-    return render_template("stores.html", stores=user_managed_stores)
+    return render_template("stores.html", stores=current_user.manage_stores)
 
 
 @main.route("/price-list")
