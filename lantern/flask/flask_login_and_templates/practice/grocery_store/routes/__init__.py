@@ -1,12 +1,11 @@
 from flask import Blueprint
 from flask_restful import Api
 
-from grocery_store.routes.users import Users
-from grocery_store.routes.goods import Goods
-from grocery_store.routes.stores import Stores
 from grocery_store.routes.auth import auth
+from grocery_store.routes.goods import Goods
 from grocery_store.routes.main import main
-
+from grocery_store.routes.stores import Stores
+from grocery_store.routes.users import Users
 
 users = Blueprint("users", __name__)
 goods = Blueprint("goods", __name__)

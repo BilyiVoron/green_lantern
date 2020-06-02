@@ -15,8 +15,29 @@ def index():
 @login_required
 def profile():
     return render_template(
-        "profile.html", user=current_user.name, email=current_user.email
+        "profile.html", user=current_user.name, email=current_user.email,
     )
+
+
+@main.route("/user_orders_list")
+@login_required
+def orders():
+    user_orders_list = []
+    for order in current_user.orders:
+        data = {
+            "store": order.store.name,
+            "date": order.created_time,
+            "price": sum([good.good.price for good in order.order_lines]),
+            "goods": {good.good.name: good.good.price for good in order.order_lines},
+        }
+        user_orders_list.append(data)
+    return render_template("orders.html", orders=user_orders_list)
+
+
+@main.route("/manage_stores")
+@login_required
+def stores():
+    return render_template("stores.html", stores=current_user.manage_stores)
 
 
 @main.route("/price-list")

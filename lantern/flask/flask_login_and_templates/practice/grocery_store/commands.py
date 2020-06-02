@@ -85,3 +85,4 @@ class PopulateOrders(Command):
                     order.store = choice(stores)
                     db.session.add(order)
             db.session.commit()
+            logging.info("Orders have been populated to database successfully")
