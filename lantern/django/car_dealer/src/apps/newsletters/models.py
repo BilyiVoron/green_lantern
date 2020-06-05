@@ -1,10 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-# from common.models import BaseDateAuditModel
+from common.models import BaseDateAuditModel
 
 
-class NewsLetter(models.Model):
+class NewsLetter(BaseDateAuditModel):
     email = models.EmailField(max_length=100)
 
     class Meta:
