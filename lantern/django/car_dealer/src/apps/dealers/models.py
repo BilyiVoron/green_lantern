@@ -20,7 +20,7 @@ class Country(models.Model):
 class City(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(
-        Country, on_delete=models.CASCADE, blank=True, null=True, related_name="cities"
+        "Country", on_delete=models.CASCADE, blank=True, null=True, related_name="cities"
     )
 
     class Meta:
@@ -35,9 +35,8 @@ class City(models.Model):
 
 class Dealer(User):
     title = models.CharField(max_length=100)
-    email = models.CharField(max_length=55, blank=True, unique=True)
     city = models.ForeignKey(
-        City, on_delete=models.DO_NOTHING, blank=False, related_name="dealers"
+        "City", on_delete=models.DO_NOTHING, blank=False, related_name="dealers"
     )
 
     class Meta:
