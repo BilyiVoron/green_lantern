@@ -1,7 +1,10 @@
+from datetime import date
+
 from django.db import models
-from django.db.models import Index, UniqueConstraint
+from django.db.models import Index
 from django.utils.translation import gettext_lazy as _
 
+from djmoney.models.fields import MoneyField
 from apps.cars.managers import CarManager, CarQuerySet
 from common.models import BaseDateAuditModel
 
@@ -34,8 +37,8 @@ class CarBrand(models.Model):
 
 
 class CarModel(models.Model):
-    name = models.CharField(max_length=64)
-    brand = models.ForeignKey(CarBrand, on_delete=models.CASCADE)
+    name = models.CharField(max_length=64, unique=True)
+    brand = models.ForeignKey("CarBrand", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ("name",)
@@ -62,6 +65,24 @@ class Car(BaseDateAuditModel):
         (STATUS_ARCHIVED, "Archived"),
     )
 
+    AUTOMATIC_TRANSMISSION = "automatic transmission"
+    SEMI_AUTOMATIC_TRANSMISSION = "semi-automatic transmission"
+    MANUAL_TRANSMISSION = "manual transmission"
+
+    GEAR_BOX_CHOICES = (
+        (AUTOMATIC_TRANSMISSION, "automatic transmission"),
+        (SEMI_AUTOMATIC_TRANSMISSION, "semi-automatic transmission"),
+        (MANUAL_TRANSMISSION, "manual transmission"),
+    )
+
+    WHEEL_DRIVE_CHOICE_YES = "Yes"
+    WHEEL_DRIVE_CHOICE_NO = "No"
+
+    ALL_WHEEL_DRIVE_CHOICES = (
+        (WHEEL_DRIVE_CHOICE_YES, "Yes"),
+        (WHEEL_DRIVE_CHOICE_NO, "No"),
+    )
+
     objects = CarManager.from_queryset(CarQuerySet)()
     views = models.PositiveIntegerField(default=0, editable=False)
     slug = models.SlugField(max_length=75)
@@ -69,17 +90,45 @@ class Car(BaseDateAuditModel):
     status = models.CharField(
         max_length=15, choices=STATUS_CHOICES, default=STATUS_PENDING, blank=True
     )
-    # dealer = models.ForeignKey("Dealer", on_delete=models.CASCADE, related_name="cars")
+    dealer = models.ForeignKey(
+        "dealers.Dealer", on_delete=models.CASCADE, related_name="cars"
+    )
 
     model = models.ForeignKey(
-        to="CarModel", on_delete=models.SET_NULL, null=True, blank=False
+        "CarModel", on_delete=models.SET_NULL, null=True, blank=False
+    )
+    color = models.ForeignKey(
+        "Color", on_delete=models.SET_NULL, null=True, blank=False
     )
     extra_title = models.CharField(
         max_length=255, null=True, blank=True, verbose_name=_("Title second part")
     )
+    first_registration_date = models.DateField(
+        auto_now_add=False, default=date.today, verbose_name="First registration date"
+    )
+    engine_type = models.CharField(max_length=25, blank=True)
+    engine_power = models.IntegerField(null=True)
+    fuel_type = models.CharField(max_length=25, null=True, blank=False)
+    fuel_capacity = models.IntegerField(null=True)
+    gear_box = models.CharField(
+        max_length=27, choices=GEAR_BOX_CHOICES, null=True, blank=False
+    )
+    all_wheel_drive = models.CharField(
+        max_length=3, choices=ALL_WHEEL_DRIVE_CHOICES, null=True, blank=False
+    )
+    doors = models.IntegerField(null=True)
+    sitting_place = models.IntegerField(null=True)
+    trunk_capacity = models.IntegerField(null=True)
+    population_type = models.CharField(max_length=55, null=True, blank=False)
+    price = MoneyField(
+        max_digits=9, decimal_places=2, default_currency="USD", null=True
+    )
 
-    # other fields ...
-    #
+    class Meta:
+        verbose_name = _("Car")
+        verbose_name_plural = _("Cars")
+
+        indexes = [Index(fields=["status", ])]
 
     def save(self, *args, **kwargs):
         order_number_start = 7600000
@@ -105,4 +154,8 @@ class Car(BaseDateAuditModel):
         verbose_name = _("Car")
         verbose_name_plural = _("Cars")
 
-        indexes = [Index(fields=["status", ])]
+
+class Property(models.Model):
+    name = models.CharField(max_length=55)
+    category = models.CharField(max_length=55)
+    car = models.ManyToManyField("Car", related_name="properties")
