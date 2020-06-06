@@ -150,10 +150,6 @@ class Car(BaseDateAuditModel):
     def __str__(self):
         return self.title
 
-    class Meta:
-        verbose_name = _("Car")
-        verbose_name_plural = _("Cars")
-
 
 class Property(models.Model):
     name = models.CharField(max_length=55)

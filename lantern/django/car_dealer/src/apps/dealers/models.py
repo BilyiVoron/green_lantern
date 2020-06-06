@@ -20,7 +20,11 @@ class Country(models.Model):
 class City(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(
-        "Country", on_delete=models.CASCADE, blank=True, null=True, related_name="cities"
+        "Country",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="cities",
     )
 
     class Meta:
@@ -34,16 +38,18 @@ class City(models.Model):
 
 
 class Dealer(User):
-    title = models.CharField(max_length=100)
+    # title = models.CharField(max_length=100)
     city = models.ForeignKey(
         "City", on_delete=models.DO_NOTHING, blank=False, related_name="dealers"
     )
 
     class Meta:
-        indexes = [Index(fields=("title",))]
-
         verbose_name = _("Dealer")
         verbose_name_plural = _("Dealers")
+
+    @property
+    def title(self):
+        return f"{self.first_name} {self.last_name} {self.email}"
 
     def __str__(self):
         return self.title
