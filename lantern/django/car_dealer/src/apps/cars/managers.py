@@ -1,4 +1,5 @@
 from django.db import models
+
 # from django.db.models.functions import Concat
 
 
@@ -8,6 +9,12 @@ class CarQuerySet(models.QuerySet):
 
     def archived(self):
         return self.filter(status="archived")
+
+    def pending(self):
+        return self.filter(status="pending")
+
+    def sold(self):
+        return self.filter(status="sold")
 
 
 class CarManager(models.Manager):
