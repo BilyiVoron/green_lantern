@@ -3,6 +3,8 @@ from django.db.models import Index
 from django.utils.translation import gettext_lazy as _
 from phone_field import PhoneField
 
+from apps.orders.managers import OrderQuerySet, OrderManager
+
 
 class Order(models.Model):
     STATUS_RESERVED = "reserved"
@@ -17,6 +19,7 @@ class Order(models.Model):
         (STATUS_ARCHIVED, "Archived"),
     )
 
+    objects = OrderManager.from_queryset(OrderQuerySet)()
     car = models.ForeignKey(
         "cars.Car",
         on_delete=models.CASCADE,
