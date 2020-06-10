@@ -128,8 +128,9 @@ dmypy.json
 .DS_Store/
 .DS_Store
 
-/app/config/static/
-/app/static/
+/src/config/static/
+/src/static/
+/src/staticfiles/
 
 .data/
 media/
