@@ -3,14 +3,18 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
-from django.views.generic import TemplateView, DetailView, FormView, ListView
+from django.views.generic import DetailView, FormView, ListView
 
 from apps.articles.forms import ArticleImageForm, ArticlesForm
 from apps.articles.models import Article
+from config.settings.base import BASE_DIR, STATIC_BASE_DIR
 
 
-def main_page(request, some_id=None, *args, **kwargs):
-    return render(request, "pages/main_page.html")
+def index(request):
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    print(BASE_DIR)
+    print(STATIC_BASE_DIR)
+    return render(request, "index.html")
 
 
 @login_required

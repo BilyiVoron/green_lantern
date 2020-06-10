@@ -20,6 +20,9 @@ env = environ.Env(
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_BASE_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -97,9 +100,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
 # Internationalization
@@ -125,3 +128,12 @@ STATIC_ROOT = env.str("STATIC_ROOT", BASE_DIR)
 
 MEDIA_URL = "/media/"
 STATIC_URL = "/static/"
+
+# https://docs.djangoproject.com/en/3.0/ref/settings/#std:setting-STATICFILES_DIRS
+STATICFILES_DIRS = [os.path.join(env.str("STATICFILES_DIRS", STATIC_BASE_DIR))]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "../static")]
+# https://docs.djangoproject.com/en/3.0/ref/settings/#std:setting-STATICFILES_FINDERS
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
