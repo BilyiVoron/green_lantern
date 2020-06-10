@@ -137,3 +137,4 @@ media/
 deploy/envs/.**
 
 ../car_dealer/
+../sql_inspectdb/
