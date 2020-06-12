@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <ul>
+        {% for car in object_list %}
+            <li>
+                <h1>{{ car }}
+                    {{ car.model }} </h1>
+                <ul>Color: {{ car.color }}</ul>
+                <ul>Status: {{ car.status }}</ul>
+                <ul>Dealer: {{ car.dealer }}</ul>
+            </li>
+
+            {% empty %}
+            <li>No cars yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+
+

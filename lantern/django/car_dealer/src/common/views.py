@@ -28,3 +28,7 @@ class LoginView(View):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("login"))
+
+
+def home_page(request):
+    return render(request, "base.html")

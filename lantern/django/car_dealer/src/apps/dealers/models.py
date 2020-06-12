@@ -38,7 +38,6 @@ class City(models.Model):
 
 
 class Dealer(User):
-    # title = models.CharField(max_length=100)
     city = models.ForeignKey(
         "City", on_delete=models.DO_NOTHING, blank=False, related_name="dealers"
     )
