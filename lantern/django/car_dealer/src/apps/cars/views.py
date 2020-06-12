@@ -6,6 +6,23 @@ from apps.cars.models import Car
 class CarListView(ListView):
     model = Car
     template_name = "car_list.html"
+    paginate_by = 100
+
+
+class DealerCarListView(ListView):
+    model = Car
+    template_name = "cars_of_dealer.html"
+
+    def get_queryset(self):
+        return Car.objects.filter(dealer=self.kwargs.get("dealer_id", None))
+
+    # def get_queryset(self):
+    #     queryset = Car.objects.all()
+    #     dealer = self.request.GET.get("dealer_id")
+    #     if dealer is not None:
+    #         return queryset.filter(dealer_id=dealer)
+    #     else:
+    #         return queryset
 
 
 class CarDetailView(DetailView):

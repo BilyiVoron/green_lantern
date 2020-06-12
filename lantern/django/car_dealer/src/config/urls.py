@@ -12,13 +12,14 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path(
         "success/",
-        TemplateView.as_view(template_name="success_url.html", ),
+        TemplateView.as_view(template_name="index.html", ),
         name="success",
     ),
     path("newsletter/", NewsLetterView.as_view(), name="newsletter", ),
     path("login/", LoginView.as_view(), name="login", ),
     path("logout/", logout_view, name="logout", ),
     path("cars/", include("apps.cars.urls", namespace="cars_v1", )),
+    path("dealers/", include("apps.dealers.urls", namespace="dealers_v1", )),
 ]
 
 if settings.DEBUG:

@@ -24,6 +24,9 @@
                         <a href="{% url 'cars_v1:cars' %}" class="navbar-item">
                             Cars list
                         </a>
+                        <a href="{% url 'dealers_v1:dealers' %}" class="navbar-item">
+                            Dealers
+                        </a>
 {#                        {% if current_user.is_authenticated %}#}
 {#                            <a href="{{ url_for("main.profile") }}" class="navbar-item">#}
 {#                                Profile#}
@@ -34,21 +37,21 @@
 {#                                My Orders#}
 {#                            </a>#}
 {#                        {% endif %}#}
-{#                        {% if not current_user.is_authenticated %}#}
-{#                            <a href="{{ url_for("auth.login") }}" class="navbar-item">#}
-{#                                Login#}
-{#                            </a>#}
-{#                        {% endif %}#}
+                        {% if not user.is_authenticated %}
+                            <a href="{% url 'login' %}" class="navbar-item">
+                                Login
+                            </a>
+                        {% endif %}
 {#                        {% if not current_user.is_authenticated %}#}
 {#                            <a href="{{ url_for("auth.signup") }}" class="navbar-item">#}
 {#                                Sign Up#}
 {#                            </a>#}
 {#                        {% endif %}#}
-{#                        {% if current_user.is_authenticated %}#}
-{#                            <a href="{{ url_for("auth.logout") }}" class="navbar-item">#}
-{#                                Logout#}
-{#                            </a>#}
-{#                        {% endif %}#}
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'logout' %}" class="navbar-item">
+                                Logout
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

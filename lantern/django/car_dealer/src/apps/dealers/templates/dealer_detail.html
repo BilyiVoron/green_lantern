@@ -1,0 +1,10 @@
+{% extends "dealer_list.html" %}
+
+{% block content %}
+
+    <h1>Dealer: {{ dealer.title }}</h1>
+    <h1>Email: {{ dealer.email }}</h1>
+    <h1>City: {{ dealer.city }}</h1>
+    <a href="{% url 'cars_v1:cars_of_dealer' %}">Dealer's cars</a>
+
+{% endblock %}
