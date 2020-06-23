@@ -15,8 +15,8 @@ POSTGRES_PASSWORD=car_dealer
 POSTGRES_USER=car_dealer
 POSTGRES_DB=car_dealer_local
 
-MEDIA_ROOT=src/static
-STATIC_ROOT=src/media
+MEDIA_ROOT=src/media
+STATIC_ROOT=src/static
 
 LANGUAGE_CODE=en-us
 ALLOWED_HOSTS=*, 127.0.0.1, localhost

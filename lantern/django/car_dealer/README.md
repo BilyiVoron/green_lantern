@@ -9,6 +9,10 @@ Just run `make test_env`
 
 `docker-compose -f docker-compose-dev.yml build`
 
+#### Remove containers
+
+`docker-compose -f docker-compose-dev.yml down --remove-orphans`
+
 #### Before running project
 
 - Create local env file

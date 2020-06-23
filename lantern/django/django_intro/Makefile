@@ -14,3 +14,12 @@ test_env:
 
 test_user:
 	@docker exec -it -w /django_intro django_intro_api python src/manage.py createsuperuser
+
+build_compose:
+	@docker-compose -f docker-compose-dev.yml build
+
+start_compose:
+	@docker-compose -f docker-compose-dev.yml up
+
+stop_compose:
+	@docker-compose -f docker-compose-dev.yml down --remove-orphans
