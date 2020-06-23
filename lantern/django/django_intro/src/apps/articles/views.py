@@ -1,16 +1,20 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
-from django.views.generic import TemplateView, DetailView, FormView
+from django.views.generic import DetailView, FormView, ListView
 
-from apps.articles.forms import ArticleImageForm
+from apps.articles.forms import ArticleImageForm, ArticlesForm
 from apps.articles.models import Article
+from config.settings.base import BASE_DIR, STATIC_BASE_DIR
 
 
-def main_page(request, some_id=None, *args, **kwargs):
-    return render(request, "pages/main_page.html")
+def index(request):
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    print(BASE_DIR)
+    print(STATIC_BASE_DIR)
+    return render(request, "index.html")
 
 
 @login_required
@@ -20,30 +24,34 @@ def main_page_logged_id(request, some_id=None, *args, **kwargs):
 
 class SearchResultsView(View):
     def get(self, request, **kwargs):
-        # form = SearchForm(data=request.GET)
-        url = reverse("articles:search-results")
         search_q = request.GET.get("search", "")
         if search_q:
             articles = Article.objects.filter(title__icontains=search_q)
         else:
             articles = Article.objects.all()
 
-        context_data = {
-            "articles": articles,
-            # 'search_form': form
-        }
+        context_data = {"articles": articles}
+
         return render(request, "pages/search.html", context=context_data)
 
     def post(self, request):
         return HttpResponse("{}", status=201)
 
 
-class ShowTitsView(TemplateView):
-    template_name = "tits_list.html"
+def articles_json(request):
+    articles = Article.objects.all().values()
+    list_of_articles = [article for article in articles]
+    return JsonResponse(list_of_articles, safe=False)
+
+
+class ArticleListView(ListView):
+    model = Article
+    template_name = "articles.html"
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
-        # self.request
-        return {"tits": 2}
+        context = super().get_context_data(**kwargs)
+        return context
 
 
 class ArticleDetailView(DetailView):
@@ -75,3 +83,9 @@ class ArticleUpdateImageView(FormView):
         ctx["id"] = self.kwargs["id"]
 
         return ctx
+
+
+class ArticleFormView(FormView):
+    template_name = "articles_form.html"
+    form_class = ArticlesForm
+    success_url = "/articles/search/"
