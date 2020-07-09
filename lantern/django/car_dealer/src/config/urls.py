@@ -26,7 +26,7 @@ urlpatterns = [
     path("", home_page, name="homepage",),
     path("admin/", admin.site.urls),
     path(
-        "success/", TemplateView.as_view(template_name="index.html",), name="success",
+        "success/", TemplateView.as_view(template_name="success.html",), name="success",
     ),
     path("newsletter/", NewsLetterView.as_view(), name="newsletter",),
     path("login/", LoginView.as_view(), name="login",),
