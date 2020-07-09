@@ -17,14 +17,6 @@ class DealerCarListView(ListView):
     def get_queryset(self):
         return Car.objects.filter(dealer_id=self.kwargs.get("dealer_id", None))
 
-    # def get_queryset(self):
-    #     queryset = Car.objects.all()
-    #     dealer = self.request.GET.get("dealer_id")
-    #     if dealer is not None:
-    #         return queryset.filter(dealer_id=dealer)
-    #     else:
-    #         return queryset
-
 
 class CarDetailView(DetailView):
     model = Car
