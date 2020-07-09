@@ -34,6 +34,7 @@ urlpatterns = [
     path("cars/", include("apps.cars.urls", namespace="cars_v1",)),
     path("dealers/", include("apps.dealers.urls", namespace="dealers_v1",)),
     path("photos/", include("apps.photos.urls", namespace="photos_v1",)),
+    path("orders/", include("apps.orders.urls", namespace="orders_v1",)),
     path(
         "docs/",
         schema_view.with_ui("swagger", cache_timeout=0),

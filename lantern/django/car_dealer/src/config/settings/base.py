@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # "django.forms",  # uncomment in a case of troubles with templates
     "drf_yasg",
+    "phone_field",
     "apps.cars",
     "apps.dealers",
     "apps.newsletters",
@@ -77,6 +79,8 @@ TEMPLATES = [
         },
     },
 ]
+
+# FORM_RENDERER = "django.forms.renderers.TemplatesSetting"  # uncomment in a case of troubles with templates
 
 WSGI_APPLICATION = "config.wsgi.application"
 
