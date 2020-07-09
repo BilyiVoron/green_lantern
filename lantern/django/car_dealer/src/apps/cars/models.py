@@ -128,7 +128,7 @@ class Car(BaseDateAuditModel):
         verbose_name = _("Car")
         verbose_name_plural = _("Cars")
 
-        indexes = [Index(fields=["status", ])]
+        indexes = [Index(fields=["status",])]
 
     def save(self, *args, **kwargs):
         order_number_start = 7600000

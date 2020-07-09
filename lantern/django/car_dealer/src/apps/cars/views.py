@@ -12,9 +12,10 @@ class CarListView(ListView):
 class DealerCarListView(ListView):
     model = Car
     template_name = "cars_of_dealer.html"
+    pk_url_kwarg = "dealer_id"
 
     def get_queryset(self):
-        return Car.objects.filter(dealer=self.kwargs.get("dealer_id", None))
+        return Car.objects.filter(dealer_id=self.kwargs.get("dealer_id", None))
 
     # def get_queryset(self):
     #     queryset = Car.objects.all()

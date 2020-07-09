@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "drf_yasg",
     "apps.cars",
     "apps.dealers",
     "apps.newsletters",
@@ -126,3 +127,26 @@ STATIC_ROOT = env.str("STATIC_ROOT", BASE_DIR)
 
 MEDIA_URL = "/media/"
 STATIC_URL = "/static/"
+
+# swagger
+# ------------------------------------------------------------------------------
+SWAGGER_SETTINGS = {
+    "LOGIN_URL": "/admin/login",
+    "LOGOUT_URL": "/admin/logout",
+    "USE_SESSION_AUTH": True,
+    "PERSIST_AUTH": True,
+    "REFETCH_SCHEMA_WITH_AUTH": True,
+    "REFETCH_SCHEMA_ON_LOGOUT": True,
+    "SECURITY_DEFINITIONS": {
+        "Basic": {"type": "basic"},
+        "Bearer": {"in": "header", "name": "Authorization", "type": "apiKey"},
+    },
+    "DOC_EXPANSION": "full",
+    "DEFAULT_MODEL_RENDERING": "example",
+    "SUPPORTED_SUBMIT_METHODS": ["get", "put", "post", "delete", "patch", "head"],
+    "VALIDATOR_URL": None,
+}
+
+# # redoc
+# # ------------------------------------------------------------------------------
+# REDOC_SETTINGS = {"SPEC_URL": ("schema-json", {"format": ".json"})}
