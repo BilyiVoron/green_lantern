@@ -1,4 +1,5 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load tz %}
 
 {% block content %}
   <h2 style="text-align: center">We found something for you :)</h2>
@@ -6,9 +7,41 @@
     {% for article in articles %}
       <div class="article">
         <h3>{{ article.title }}</h3>
-        <p>{{ article.body|slice:":160" }}...</p>
+        <p>{{ article.body|slice:":160" }}</p>
       </div>
     {% endfor %}
   </div>
+  {% include "molecula.html" %}
+{% endblock %}
 
+<form action="" method="post">{% csrf_token %}
+
+  {% for field in form.fields %}
+    {{ field }}
+  {% endfor %}
+  {#{{ form.fields.email }}#}
+  {#{{ form }}#}
+  <input type="submit">
+  {{ form.as_p }}
+  <p>
+    <label for="">
+      <input type="text" name="">
+    </label>
+  </p>
+    <label>
+        <input type="email">
+    </label>
+    <texarea name="asfsa"></texarea>
+
+  <select name="" id="" multiple>
+    <option value=""></option>
+    <option value=""></option>
+    <option value=""></option>
+    <option value=""></option>
+  </select>
+</form>
+
+{% block scripts %}
+  {{ block.super }}
+  <script></script>
 {% endblock %}
