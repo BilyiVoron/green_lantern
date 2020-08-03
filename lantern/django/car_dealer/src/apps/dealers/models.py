@@ -38,7 +38,6 @@ class City(models.Model):
 
 
 class Dealer(User):
-    # title = models.CharField(max_length=100)
     city = models.ForeignKey(
         "City", on_delete=models.DO_NOTHING, blank=False, related_name="dealers"
     )
@@ -49,7 +48,7 @@ class Dealer(User):
 
     @property
     def title(self):
-        return f"{self.first_name} {self.last_name} {self.email}"
+        return f"{self.first_name} {self.last_name}"
 
     def __str__(self):
         return self.title

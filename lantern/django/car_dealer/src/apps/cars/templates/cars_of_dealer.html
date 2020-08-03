@@ -1,0 +1,11 @@
+{% extends "dealer_detail.html" %}
+
+{% block content %}
+
+    <h1>
+        {% for car in object_list %}
+            <li>{{ car.model.brand }} {{ car.model }} - {{ car.color }}</li>
+        {% endfor %}
+    </h1>
+
+{% endblock %}

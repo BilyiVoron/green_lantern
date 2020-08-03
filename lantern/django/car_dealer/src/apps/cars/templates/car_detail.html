@@ -1,0 +1,23 @@
+{% extends "car_list.html" %}
+
+{% block content %}
+
+    <ul>
+        <li>
+            <ul>Dealer: {{ car.dealer }}</ul>
+            <ul>Model: {{ car.model }}</ul>
+            <ul>Color: {{ car.color }}</ul>
+            <ul>Engine type: {{ car.engine_type }}</ul>
+            <ul>Engine power: {{ car.engine_power }}</ul>
+            <ul>Fuel type: {{ car.fuel_type }}</ul>
+            <ul>Fuel capacity: {{ car.fuel_capacity }}</ul>
+            <ul>Gear box: {{ car.gear_box }}</ul>
+            <ul>All-wheel drive: {{ car.all_wheel_drive }}</ul>
+            <ul>Doors: {{ car.doors }}</ul>
+            <ul>Sitting Place: {{ car.sitting_place }}</ul>
+            <ul>Trunk capacity: {{ car.trunk_capacity }}</ul>
+            <ul>Price: {{ car.price }}</ul>
+        </li>
+    </ul>
+
+{% endblock %}
